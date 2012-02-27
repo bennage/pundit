@@ -1,0 +1,42 @@
+!!!
+html
+  head
+    title pundit
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script
+        var login = '#{login}';
+
+  body.root
+    -if(hasMessages) 
+        #messages
+            -each message in messages
+                div(class=message.type)=message.content
+    header  
+        .pad
+            h1 
+                a(href='/') pundit
+            
+            select#docs
+                option(selected,data-default) --choose a document--
+
+            #account
+                - if (!user)
+                    span Sign in with 
+                    a(href='/auth/github') GitHub 
+
+                - else
+                    .username= user.name
+                        &nbsp;
+                        a(href='/logout') [Sign Out]
+
+    section#main!= body
+
+    footer 
+        .pad
+            p © 2012 Christopher Bennage
+
+    script(src='/vendor/Modernizr.js')
+    script(src='/vendor/jquery-1.7.1.min.js')
+    script(src='/vendor/jquery.history.js')
+    script(src='/vendor/mustache.js')
+    script(src="/javascripts/client.js")

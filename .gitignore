@@ -1,0 +1,9 @@
+*.log
+*.gz
+config.js
+logs
+node_modules/*
+*.sublime-workspace
+*.logs/*
+source/*
+data/*

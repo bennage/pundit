@@ -1,0 +1,110 @@
+@import 'normalize'
+@import 'mixins'
+
+bg = rgb(222,242,196)
+dark = rgb(102,84,70)
+contrast = rgb(229,104,63)
+accent2 = rgb(174,204,182)
+accent = rgb(128,153,148)
+light_text = hsl(0,100%,100%)
+speech_bg = hsl(0,0%,90%)
+
+pad = 12px
+
+@import 'layout'
+@import 'notification'
+
+body
+	font 14px 'Lucida Grande', Helvetica, Arial, sans-serif
+	background-color bg
+	background-image dirt
+
+	header
+		.pad
+			padding pad
+			background-color dark
+
+		#account
+			position absolute
+			right pad
+			top pad
+		h1
+			margin 0
+			a, a:visited
+				text-decoration none
+				color light_text
+				text-shadow white 0px 0px 2px, black 1px 1px 0px
+
+	#main
+		background-color white
+
+	footer
+		.pad
+			padding pad
+			background-color dark
+			color white
+
+.context 
+	vendor(box-flex, 1)
+	width 100%
+
+.highlight
+	background-color #FFFF99
+	vendor(box-shadow, 0px 0px 20px #FFFF99)
+
+.has-comments:before
+	content ' '
+	display block
+	background-image url(/comment_yellow.gif)
+	position absolute
+	width 16px
+	height 16px
+	margin-left -24px
+
+#for-review 
+	background-color #ededed
+	margin 1em
+	border 1px solid #ddd
+	padding 1em
+	font-family Georgia
+
+	.focus
+		background-color #FFFF99
+		vendor(box-shadow, 0px 0px 30px #FFFF99)
+		border 1px dotted rgba(0,0,0,0.2)
+
+	 p, h1, h2, h3
+		border 1px solid transparent
+
+#comments
+	width 400px
+	background-color #ededed
+	margin 1em
+	border 1px solid #ddd
+	padding 1em
+
+	.comment-body
+		min-height 200px
+		background-color #ddd
+
+	.history
+		.comment
+			margin 4px
+			margin-bottom 8px
+			font-family Georgia
+			.author
+				img
+					background-color black
+					width 24px
+					height 24px
+					vendor(border-radius, 4px)
+					float left
+				.login
+					font-size 22px
+					margin-left 6px
+				.timestamp
+					float right
+					color rgba(0,0,0,0.5)
+					font-style italic
+			p
+				margin 0
