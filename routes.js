@@ -5,9 +5,10 @@ var db = require('./data');
 module.exports = {
 
 	index: function(req, res) {
-		var files = fs.readdirSync('./source');
-		res.render('index', {
-			files: files
+		fs.readdir('./source', function(err, files) {
+			res.render('index', {
+				files: files
+			});
 		});
 	},
 
@@ -49,9 +50,10 @@ module.exports = {
 
 	getDocument: function(req, res) {
 		var file = req.params.file;
-		var content = fs.readFileSync('./source/' + file, 'utf8');
-		res.send({
-			content: content
+		fs.readFile('./source/' + file, 'utf8', function(err, content) {
+			res.send({
+				content: content
+			});
 		});
 	}
 };

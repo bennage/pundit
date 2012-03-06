@@ -1,6 +1,8 @@
 var fs = require('fs'),
 	path = require('path');
 
+// yes, sync is evil!
+
 var data_file = './data/data',
 	hash_table = loadSync();
 
