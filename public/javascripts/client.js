@@ -79,6 +79,8 @@
 		var body = $('#comments .comment-body');
 		var now = Date.now();
 
+		$('#view-all').show();
+
 		history.empty();
 
 		if (focus) {
@@ -90,8 +92,8 @@
 		body.attr('contenteditable', 'true').text('').focus();
 
 		var template = $('#tmpl-comment').html();
-
-		matching(path).forEach(function(x) {
+		var set = matching(path);
+		set.forEach(function(x) {
 			x.timestampFormatted = function() {
 				return how_long_since(x.timestamp, now);
 			};
@@ -103,6 +105,8 @@
 				history.append(out);
 			}
 		});
+
+		$('#comments .comments-stats').text(set.length + ' comment(s) for selection');
 	}
 
 	function render_comments() {
@@ -138,7 +142,7 @@
 
 	function associate_existing_comments() {
 
-		$('#comments .comments-stats').text(store.length + ' comments');
+		$('#comments .comments-stats').text(store.length + ' total comment(s)');
 
 		store.forEach(function(x) {
 			var selector = '[data-path="' + x.path + '"]';
@@ -179,6 +183,14 @@
 	function document_has_changed() {
 
 		set_context_from_url();
+
+		$('#view-all').hide();
+		$('#view-all').click(function() {
+			$('#view-all').hide();
+			reset_comment_edits();
+			render_comments();
+			$('#comments .comments-stats').text(store.length + ' total comment(s)');
+		});
 
 		$.getJSON('/document/' + context, function(data) {
 
