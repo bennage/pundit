@@ -14,7 +14,7 @@
 
 	function save_comment(evt) {
 		var el = $(evt.currentTarget);
-		var body = el.text();
+		var body = $('#comments .comment-body').text();
 		var target = focus;
 		var chain = target.parentsUntil('section').andSelf().toArray();
 		var path = to_path(chain.slice(1));
@@ -32,8 +32,16 @@
 			body: body
 		};
 
+		//todo: remove the comment so it won't duplicate
+		// when editing
+
 		$.post('/comment/' + context, comment, function(data, textStatus, jqXHR) {
 			console.log(textStatus);
+			comment.author = {
+				login: login
+			};
+			store.push(comment);
+			target.addClass('has-comments');
 		});
 	}
 
@@ -61,6 +69,7 @@
 	function reset_comment_edits() {
 		var history = $('#comments .history');
 		var body = $('#comments .comment-body');
+		var btn = $('#save');
 
 		history.empty();
 
@@ -71,6 +80,7 @@
 		focus = null;
 
 		body.attr('contenteditable', 'false').text('');
+		btn.attr('disabled', 'disabled');
 	}
 
 	function set_focus(target, chain) {
@@ -78,6 +88,7 @@
 		var history = $('#comments .history');
 		var body = $('#comments .comment-body');
 		var now = Date.now();
+		var btn = $('#save');
 
 		$('#view-all').show();
 
@@ -90,6 +101,8 @@
 		focus = target;
 
 		body.attr('contenteditable', 'true').text('').focus();
+		btn.removeAttr('disabled', 'disabled');
+
 
 		var template = $('#tmpl-comment').html();
 		var set = matching(path);
@@ -112,6 +125,7 @@
 	function render_comments() {
 		var template = $('#tmpl-comment').html();
 		var history = $('#comments .history');
+		var body = $('#comments .comment-body');
 		var now = Date.now();
 
 		store.forEach(function(x) {
@@ -119,12 +133,8 @@
 				return how_long_since(x.timestamp, now);
 			};
 
-			if (x.author.login === login) {
-				body.text(x.body);
-			} else {
-				var out = Mustache.render(template, x);
-				history.append(out);
-			}
+			var out = Mustache.render(template, x);
+			history.append(out);
 		});
 	}
 
@@ -245,7 +255,8 @@
 
 		$.getJSON('/documents', setup_document_list);
 
-		$('#comments .comment-body').blur(save_comment);
+		// $('#comments .comment-body').blur(save_comment);
+		$('#save').click(save_comment);
 
 		document_has_changed();
 	});
