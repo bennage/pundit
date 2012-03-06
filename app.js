@@ -84,6 +84,7 @@ files.forEach(function(file) {
 });
 
 app.get('/', routes.index);
+app.get('/export', routes['export']);
 app.post('/comment/:file', routes.saveComment);
 app.get('/comments/:file', routes.getComments);
 app.get('/documents', routes.getDocuments);

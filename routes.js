@@ -55,5 +55,11 @@ module.exports = {
 				content: content
 			});
 		});
+	},
+
+	'export': function(req,res){
+		fs.readFile('./data/data', 'utf8', function(err, content) {
+			res.json(JSON.parse(content));
+		});
 	}
 };
