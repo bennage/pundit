@@ -62,17 +62,11 @@ app.configure('production', function() {
 
 viewHelper.initialize(app);
 
-
 // yes, sync is evil but this is a one-time startup
 var fs = require('fs');
 var markdown = require("markdown").markdown;
 var files = fs.readdirSync('./source');
 var ignore = ['Copyright.markdown','README.markdown'];
-
-function shouldIgnore(file){
-
-
-}
 
 files.forEach(function(file) {
     if(file.indexOf('.markdown') === -1) return;
