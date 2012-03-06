@@ -62,11 +62,15 @@ app.configure('production', function() {
 
 viewHelper.initialize(app);
 
+
+// yes, sync is evil but this is a one-time startup
 var fs = require('fs');
 var markdown = require("markdown").markdown;
 var files = fs.readdirSync('./source');
 
 files.forEach(function(file) {
+    if(file.indexOf('.markdown') === -1) return;
+    
     var input = fs.readFileSync('./source/' + file, 'utf8');
     var output = markdown.toHTML(input);
     fs.writeFileSync('./source/' + file.replace('.markdown', '.html'), output);
