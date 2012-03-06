@@ -196,16 +196,18 @@
 			}, function() {
 				$(this).removeClass('highlight');
 			});
+
+			reset_comment_edits();
+
+			$.getJSON('/comments/' + context, function(data) {
+				store = make_array(data);
+				mark_document_elements();
+				associate_existing_comments();
+				render_comments();
+			});
 		});
 
-		reset_comment_edits();
 
-		$.getJSON('/comments/' + context, function(data) {
-			store = make_array(data);
-			mark_document_elements();
-			associate_existing_comments();
-			render_comments();
-		});
 	}
 
 	function set_context_from_url() {
