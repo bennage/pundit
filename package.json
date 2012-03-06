@@ -8,6 +8,7 @@
     , "jade": ">= 0.0.1"
     , "everyauth": ">= 0.2.18"
     , "markdown": "0.3.1"
+    , "azure":">=0.5.2"
   }
   , "devDependencies": {
       "mocha": "*"

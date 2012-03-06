@@ -1,7 +1,7 @@
 var x = require('express'),
     viewHelper = require('./viewHelper'),
-    routes = require('./routes');
-app = module.exports = x.createServer();
+    routes = require('./routes'),
+    app = module.exports = x.createServer();
 
 function context(req, res, next) {
 
