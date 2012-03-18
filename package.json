@@ -3,9 +3,8 @@
   , "version": "0.0.1"
   , "private": true
   , "dependencies": {
-      "express": ">= 2.5.x"
+      "express": ">= 2.5.8"
     , "stylus": ">= 0.0.1"
-    , "jade": ">= 0.0.1"
     , "everyauth": ">= 0.2.18"
     , "markdown": "0.3.1"
     , "azure":">=0.5.2"
