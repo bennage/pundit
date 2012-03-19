@@ -3,17 +3,32 @@ var https = require('https');
 var fs = require('fs');
 
 var repo = '/mspnp/cqrs-journey-doc/';
+var output_path = './source/';
 
-function get(options, success) {
+function https_get(options, success) {
 	return https.get(options, function(res) {
 		if (res.statusCode !== 200) {
-			console.log("statusCode: ", res.statusCode);
-			console.log("headers: ", res.headers);
+			console.log('statusCode: ', res.statusCode);
+			console.log('headers: ', res.headers);
 		} else {
 			success(res);
 		}
 	}).on('error', function(e) {
 		console.error(e);
+	});
+}
+
+function git(options, next) {
+	https_get(options, function(res) {
+		var buffer = '';
+
+		res.on('data', function(d) {
+			buffer += d;
+		});
+
+		res.on('end', function() {
+			next(null, buffer);
+		});
 	});
 }
 
@@ -24,86 +39,58 @@ function downloadBlob(blob) {
 
 	console.log(root + path);
 
-	get({
+	git({
 		host: root,
 		path: path
-	}, function(res) {
-
-		var buffer = '';
-
-		res.on('data', function(d) {
-			buffer += d;
-			console.log('+');
-		});
-
-		res.on('end', function() {
-			console.log('writing ' + blob.path);
-			fs.writeFile('./source/' + blob.path, buffer);
-		});
+	}, function(err, buffer) {
+		console.log('writing ' + blob.path);
+		fs.writeFile(output_path + blob.path, buffer);
 	});
 }
 
 function getTree(sha, branch) {
-	get({
+	git({
 		host: 'api.github.com',
-		path: '/repos' + repo + 'git/trees/' + sha
-	}, function(res) {
+		path: '/repos' + repo + 'git/trees/' + sha + '?recursive=1'
+	}, function(err, buffer) {
 
-		var buffer = '';
-		res.on('data', function(d) {
-			buffer += d;
-		});
+		var o = JSON.parse(buffer);
 
-		res.on('end', function() {
-			var o = JSON.parse(buffer);
+		o.tree.filter(function(x) {
+			console.dir(x);
+			return x.type === 'blob';
+		}).map(function(x) {
+			return {
+				sha: x.sha,
+				path: x.path,
+				branch: branch
+			};
+		}).forEach(downloadBlob);
 
-			o.tree.filter(function(x) {
-				return x.path.indexOf('.markdown') !== -1;
-			}).map(function(x) {
-				return {
-					sha: x.sha,
-					path: x.path,
-					branch: branch
-				};
-			}).forEach(downloadBlob);
+		// o.tree.filter(function(x) {
+		// 	return x.type === 'tree';
+		// }).forEach(function(x) {
+		// 	getTree(x.sha, branch);
+		// });
 
-		});
 	});
 }
 
 function getCommit(commit) {
 
-	get({
+	git({
 		host: 'api.github.com',
 		path: '/repos' + repo + 'git/commits/' + commit
-	}, function(res) {
-
-		var buffer = '';
-		res.on('data', function(d) {
-			buffer += d;
-		});
-
-		res.on('end', function() {
-			var o = JSON.parse(buffer);
-			getTree(o.tree.sha, commit);
-		});
-
+	}, function(err, buffer) {
+		var o = JSON.parse(buffer);
+		getTree(o.tree.sha, commit);
 	});
 }
 
-get({
+git({
 	host: 'api.github.com',
 	path: '/repos' + repo + 'git/refs/heads/master'
-}, function(res) {
-
-	var buffer = '';
-	res.on('data', function(d) {
-		buffer += d;
-	});
-
-	res.on('end', function() {
-		var o = JSON.parse(buffer);
-		getCommit(o.object.sha);
-	});
-
+}, function(err, buffer) {
+	var o = JSON.parse(buffer);
+	getCommit(o.object.sha);
 });
