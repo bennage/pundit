@@ -351,12 +351,22 @@ body footer .pad {
 #for-review h3 {
   border: 1px solid transparent;
 }
+#for-review img {
+  max-width: 100%;
+}
+#comments-spacer {
+  width: 400px;
+  margin: 1em 1em 1em 0em;
+}
 #comments {
   width: 400px;
   background-color: #ededed;
-  margin: 1em;
   border: 1px solid #ddd;
   padding: 1em;
+  margin: 1em 1em 1em 0em;
+  position: fixed;
+  top: 78px;
+  right: 0;
 }
 #comments .comment-body {
   min-height: 200px;
