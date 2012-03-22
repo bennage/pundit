@@ -172,7 +172,7 @@
 	}
 
 	function setup_document_list(documents) {
-		var el = $('#docs');
+		var el = $('#docs select');
 
 		documents.forEach(function(doc) {
 			el.append('<option>' + doc + '</option>');

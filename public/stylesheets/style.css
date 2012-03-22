@@ -230,9 +230,28 @@ html {
   height: 100%;
   width: 100%;
 }
+.root header {
+  height: 64px;
+}
+.root header .pad {
+  height: 100%;
+}
+.root header .pad h1,
+.root header .pad #docs,
+.root header .pad #repo {
+  display: table-cell;
+  width: 1px;
+  vertical-align: middle;
+  padding-right: 16px;
+}
 .root header,
 .root footer {
   display: table-row;
+  width: 100%;
+}
+.root header .pad,
+.root footer .pad {
+  display: table;
   width: 100%;
 }
 .root #main {
@@ -365,7 +384,7 @@ body footer .pad {
   padding: 1em;
   margin: 1em 1em 1em 0em;
   position: fixed;
-  top: 78px;
+  top: 64px;
   right: 0;
 }
 #comments .comment-body {

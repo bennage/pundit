@@ -16,8 +16,12 @@ html
             h1 
                 a(href='/') pundit
             
-            select#docs
-                option(selected,data-default) --choose a document--
+            #docs
+                select
+                    option(selected,data-default) --choose a document--
+
+            #repo
+                a(href='https://github.com/mspnp/cqrs-journey-doc/tree/' + request.sha) repo
 
             #account
                 - if (!user)
@@ -28,6 +32,7 @@ html
                     .username= user.name
                         &nbsp;
                         a(href='/logout') [Sign Out]
+
 
     section#main!= body
 
