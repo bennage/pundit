@@ -1,4 +1,6 @@
 var convert = require('./lib/convert')(),
 	config = require('./lib/config');
 
-convert('./source', './markdown');
+var imageRoot = 'https://raw.github.com/mspnp/cqrs-journey-doc/master/';
+
+convert('./source', './markdown', imageRoot);
