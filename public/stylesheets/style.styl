@@ -8,6 +8,7 @@ accent2 = rgb(174,204,182)
 accent = rgb(128,153,148)
 light_text = hsl(0,100%,100%)
 speech_bg = hsl(0,0%,90%)
+highlight = #FFFF99
 
 pad = 12px
 
@@ -49,8 +50,8 @@ body
 	width 100%
 
 .highlight
-	background-color #FFFF99
-	vendor(box-shadow, 0px 0px 20px #FFFF99)
+	background-color highlight
+	vendor(box-shadow, 0px 0px 20px highlight)
 
 .has-comments:before
 	content ' '
@@ -69,8 +70,8 @@ body
 	font-family Georgia
 
 	.focus
-		background-color #FFFF99
-		vendor(box-shadow, 0px 0px 30px #FFFF99)
+		background-color highlight
+		vendor(box-shadow, 0px 0px 30px highlight)
 		border 1px dotted rgba(0,0,0,0.2)
 
 	 p, h1, h2, h3
@@ -121,6 +122,7 @@ body
 			padding 4px
 			font-family Georgia
 			border 1px solid transparent
+			background-color highlight
 			vendor(border-radius, 4px)
 			.author
 				img
