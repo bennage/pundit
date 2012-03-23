@@ -174,7 +174,7 @@
 	function setup_document_list(documents) {
 		var el = $('#docs select');
 
-		documents.forEach(function(doc) {
+		documents.sort().forEach(function(doc) {
 			el.append('<option>' + doc + '</option>');
 		});
 
@@ -228,15 +228,13 @@
 				render_comments();
 			});
 		});
-
-
 	}
 
 	function set_context_from_url() {
 
 		context = null;
 
-		var target = window.location.href.match(/\/#?([\w-]*\.html)/);
+		var target = window.location.href.match(/\/#?([\w-]*\.doc)/);
 		if (target !== null && target.length > 0) context = target[1];
 
 		if (!context) {
