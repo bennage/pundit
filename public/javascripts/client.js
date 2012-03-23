@@ -1,6 +1,6 @@
 (function() {
 
-	var elems = 'h1,h2,h3,h4,h5,h6,p',
+	var elems = 'h1,h2,h3,h4,h5,h6,p,img',
 		root = '#for-review',
 		focus = null,
 		context = '',
@@ -18,6 +18,7 @@
 		var target = focus;
 		var chain = target.parentsUntil('section').andSelf().toArray();
 		var path = to_path(chain.slice(1));
+		var hash = el.data('hash');
 
 		if (!body || body === '') {
 			// todo: check to see if the comment was modified
@@ -27,6 +28,7 @@
 		}
 
 		var comment = {
+			hash: hash,
 			regarding: target.text(),
 			path: path,
 			body: body
@@ -146,7 +148,13 @@
 			var path = to_path(chain.slice(1));
 
 			el.attr('data-path', path);
-		});
+
+			var content = (this.nodeName === 'IMG') ? this.src : this.innerText;
+			content = content.toLowerCase().replace(/[^a-z0-9]+/g, '');
+
+			el.data('hash', md5(content));
+
+			});
 	}
 
 	function associate_existing_comments() {
@@ -220,6 +228,8 @@
 				$(this).removeClass('highlight');
 			});
 
+			article.find(elems).each(mark_elements);
+
 			reset_comment_edits();
 
 			$.getJSON('/comments/' + context, function(data) {
@@ -229,6 +239,19 @@
 				render_comments();
 			});
 		});
+	}
+
+	function mark_elements(index, el) {
+		// handle img differently
+		var content = (el.nodeName === 'IMG') ? el.src : el.innerText;
+		content = content.toLowerCase().replace(/[^a-z0-9]+/g, '');
+
+		// var m = md5(content);
+		// console.log(el.nodeName);
+		// console.log(m);
+		// console.log(content);
+
+		$(el).data('hash', md5(content));
 	}
 
 	function set_context_from_url() {
