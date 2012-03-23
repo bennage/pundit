@@ -285,6 +285,10 @@
 			document_has_changed();
 		});
 
+		$.ajaxSetup({
+			cache: false
+		});
+
 		$.getJSON('/documents', setup_document_list);
 
 		// $('#comments .comment-body').blur(save_comment);
