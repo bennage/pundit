@@ -42,9 +42,10 @@
 		// when editing
 		$.post('/comment/' + context, comment, function(data, textStatus, jqXHR) {
 			console.log(textStatus);
-			comment.author_login = login;
+			comment.author_login = pundit.user.login;
 			comment.when = new Date();
-			//todo: add avatar url
+			comment.author_gravatar_id = pundit.user.gravatar_id;
+
 			store.push(comment);
 			target.addClass('has-comments');
 			btn.removeAttr('disabled');
@@ -125,7 +126,7 @@
 				return how_long_since(x.when, now);
 			};
 
-			if (x.author_login === login) {
+			if (x.author_login === pundit.user.login) {
 				body.text(x.body);
 			} else {
 				var out = Mustache.render(template, x);

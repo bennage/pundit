@@ -4,7 +4,8 @@ html
     title pundit
     link(rel='stylesheet', href='/stylesheets/style.css')
     script
-        var login = '#{login}';
+        var pundit = pundit || {};
+        pundit.user = !{JSON.stringify(user)};
 
   body.root
     -if(hasMessages) 
