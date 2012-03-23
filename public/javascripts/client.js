@@ -25,6 +25,21 @@
 		});
 	}
 
+	function delete_comment(evt) {
+		var el = $(evt.currentTarget);
+		var comment = el.parents('.comment');
+		var hash = comment.data('comment-id');
+
+		if(!confirm('Are you sure?')) return;
+		
+		el.attr('disabled', 'disabled');
+
+		$.post('/comment/delete/' + context + '/' + hash, {}, function(data, textStatus, jqXHR) {
+			console.log(textStatus);
+			comment.remove();
+		});
+	}
+
 	function save_comment(evt) {
 		var el = $(evt.currentTarget);
 		var body = $('#comments .comment-body').text();
@@ -297,6 +312,7 @@
 		document_has_changed();
 
 		$(document).on('click', '.comment button.handle', handle_comment);
+		$(document).on('click', '.comment button.delete', delete_comment);
 	});
 
 })();
