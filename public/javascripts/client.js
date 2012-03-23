@@ -12,6 +12,19 @@
 		}).join();
 	}
 
+	function handle_comment(evt) {
+		var el = $(evt.currentTarget);
+		var comment = el.parents('.comment');
+		var hash = comment.data('comment-id');
+		el.attr('disabled', 'disabled');
+
+		$.post('/comment/handle/' + context + '/' + hash, {}, function(data, textStatus, jqXHR) {
+			console.log(textStatus);
+			comment.addClass('handled');
+			el.remove();
+		});
+	}
+
 	function save_comment(evt) {
 		var el = $(evt.currentTarget);
 		var body = $('#comments .comment-body').text();
@@ -22,7 +35,7 @@
 		var btn = $('#save');
 		var status = $('#comment-status');
 
-		btn.attr('disabled','disabled');
+		btn.attr('disabled', 'disabled');
 
 		if (!body || body === '') {
 			// todo: check to see if the comment was modified
@@ -278,6 +291,8 @@
 		$('#save').click(save_comment);
 
 		document_has_changed();
+
+		$(document).on('click', '.comment button.handle', handle_comment);
 	});
 
 })();

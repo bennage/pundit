@@ -406,10 +406,20 @@ body footer .pad {
   padding-right: 1em;
   color: #008000;
 }
+#comments .history .comment.handled {
+  border: 1px dotted rgba(0,0,0,0.20);
+  background-color: rgba(0,0,0,0.20);
+}
 #comments .history .comment {
-  margin: 4px;
-  margin-bottom: 8px;
+  margin: 4px 0px 8px 0px;
+  padding: 4px;
   font-family: Georgia;
+  border: 1px solid transparent;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
 }
 #comments .history .comment .author img {
   background-color: #000;
