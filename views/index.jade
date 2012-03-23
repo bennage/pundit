@@ -1,10 +1,10 @@
 script#tmpl-comment(type='text/html')
 	.comment
 		.author
-			img(src='https://secure.gravatar.com/avatar/{{author.gravatar_id}}?s=140')
-			span.login {{author.login}}
-			span.timestamp(title='{{timestamp}}') {{timestampFormatted}}
-		p.body {{body}}
+			img(src='https://secure.gravatar.com/avatar/{{author_gravatar_id}}?s=140', title='{{author_name}}')
+			span.login(title='{{author_name}}') {{author_login}}
+			span.timestamp(title='{{when}}') {{timestampFormatted}}
+		p.body(title='{{regarding}}') {{body}}
 		
 #workspace
 	article
@@ -21,7 +21,9 @@ script#tmpl-comment(type='text/html')
 			.comments-stats
 
 			- if (user)
-				.comment-body(contenteditable='false')
-				button#save(disabled) save
+				#comment-editor
+					.comment-body(contenteditable='false')
+					span#comment-status
+					button#save(disabled) save
 			
 			.history

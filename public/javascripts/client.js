@@ -19,6 +19,10 @@
 		var chain = target.parentsUntil('section').andSelf().toArray();
 		var path = to_path(chain.slice(1));
 		var hash = target.data('hash');
+		var btn = $('#save');
+		var status = $('#comment-status');
+
+		btn.attr('disabled','disabled');
 
 		if (!body || body === '') {
 			// todo: check to see if the comment was modified
@@ -38,11 +42,13 @@
 		// when editing
 		$.post('/comment/' + context, comment, function(data, textStatus, jqXHR) {
 			console.log(textStatus);
-			comment.author = {
-				login: login
-			};
+			comment.author_login = login;
+			comment.when = new Date();
+			//todo: add avatar url
 			store.push(comment);
 			target.addClass('has-comments');
+			btn.removeAttr('disabled');
+			status.text('comment saved').fadeIn('fast').delay(3000).fadeOut('slow');
 		});
 	}
 
@@ -71,6 +77,8 @@
 		var history = $('#comments .history');
 		var body = $('#comments .comment-body');
 		var btn = $('#save');
+		var editor = $('#comment-editor');
+		var status = $('#comment-status');
 
 		history.empty();
 
@@ -82,16 +90,21 @@
 
 		body.attr('contenteditable', 'false').text('');
 		btn.attr('disabled', 'disabled');
+		editor.hide('fast');
+		status.text('');
 	}
 
 	function set_focus(target, chain) {
 		var path = target.data('path');
 		var history = $('#comments .history');
 		var body = $('#comments .comment-body');
+		var editor = $('#comment-editor');
 		var now = Date.now();
 		var btn = $('#save');
+		var status = $('#comment-status');
 
 		$('#view-all').show();
+		status.text('');
 
 		history.empty();
 
@@ -103,15 +116,16 @@
 
 		body.attr('contenteditable', 'true').text('').focus();
 		btn.removeAttr('disabled', 'disabled');
+		editor.show('fast');
 
 		var template = $('#tmpl-comment').html();
 		var set = matching(path);
 		set.forEach(function(x) {
 			x.timestampFormatted = function() {
-				return how_long_since(x.timestamp, now);
+				return how_long_since(x.when, now);
 			};
 
-			if (x.author.login === login) {
+			if (x.author_login === login) {
 				body.text(x.body);
 			} else {
 				var out = Mustache.render(template, x);
@@ -130,7 +144,7 @@
 
 		store.forEach(function(x) {
 			x.timestampFormatted = function() {
-				return how_long_since(x.timestamp, now);
+				return how_long_since(x.when, now);
 			};
 
 			var out = Mustache.render(template, x);

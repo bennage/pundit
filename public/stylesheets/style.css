@@ -387,9 +387,24 @@ body footer .pad {
   top: 64px;
   right: 0;
 }
-#comments .comment-body {
+#comments header {
+  height: 100%;
+}
+#comments #comment-editor {
+  text-align: right;
+}
+#comments #comment-editor .comment-body {
   min-height: 200px;
   background-color: #ddd;
+  text-align: left;
+}
+#comments #comment-editor #save {
+  margin-top: 4px;
+}
+#comments #comment-editor #comment-status {
+  font-style: italic;
+  padding-right: 1em;
+  color: #008000;
 }
 #comments .history .comment {
   margin: 4px;
