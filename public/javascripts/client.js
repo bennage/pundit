@@ -34,7 +34,6 @@
 
 		//todo: remove the comment so it won't duplicate
 		// when editing
-
 		$.post('/comment/' + context, comment, function(data, textStatus, jqXHR) {
 			console.log(textStatus);
 			comment.author = {
@@ -201,6 +200,8 @@
 			render_comments();
 			$('#comments .comments-stats').text(store.length + ' total comment(s)');
 		});
+
+		if (!context) return;
 
 		$.getJSON('/document/' + context, function(data) {
 
