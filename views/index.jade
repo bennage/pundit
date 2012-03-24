@@ -1,8 +1,8 @@
 script#tmpl-comment(type='text/html')
 	.comment(data-comment-id='{{hash}}', class='{{#handled}}handled{{/handled}}')
 		.author
-			img(src='https://secure.gravatar.com/avatar/{{author_gravatar_id}}?s=140', title='{{author_name}}')
-			span.login(title='{{author_name}}') {{author_login}}
+			img(src='{{author_avatar_url}}', title='{{author_name}}')
+			span.login(title='{{author_name}}') {{author_name}}
 			span.timestamp(title='{{when}}') {{timestampFormatted}}
 		p.body(title='{{regarding}}') {{body}}
 		- if (user && user.__pundit_role__ === 'admin')

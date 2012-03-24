@@ -28,6 +28,8 @@ html
                 - if (!user)
                     span Sign in with 
                     a(href='/auth/github') GitHub 
+                    a(href='/auth/twitter') twitter 
+                    a(href='/auth/facebook') facebook 
 
                 - else
                     .username= user.name

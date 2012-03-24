@@ -70,9 +70,9 @@
 		// when editing
 		$.post('/comment/' + context, comment, function(data, textStatus, jqXHR) {
 			console.log(textStatus);
-			comment.author_login = pundit.user.login;
+			comment.author_name = pundit.user.username;
 			comment.when = new Date();
-			comment.author_gravatar_id = pundit.user.gravatar_id;
+			comment.author_avatar_url = pundit.user.__pundit_avatar_url__;
 
 			store.push(comment);
 			target.addClass('has-comments');
