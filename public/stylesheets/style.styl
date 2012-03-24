@@ -15,6 +15,11 @@ pad = 12px
 @import 'layout'
 @import 'notification'
 
+a
+	color accent2
+	text-decoration none
+	border-bottom 1px dotted accent2
+
 body
 	font 14px 'Lucida Grande', Helvetica, Arial, sans-serif
 	background-color bg
@@ -29,10 +34,18 @@ body
 			position absolute
 			right pad
 			top pad
+
+			ul
+				list-style none
+				margin 0
+				li
+					display inline
+					padding-right 1em
 		h1
 			margin 0
 			a, a:visited
 				text-decoration none
+				border none
 				color light_text
 				text-shadow white 0px 0px 2px, black 1px 1px 0px
 

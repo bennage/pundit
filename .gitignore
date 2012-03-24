@@ -8,6 +8,8 @@ node_modules/*
 source/*
 pages/*
 
+*.css
+
 *.publishsettings
 node.exe
 setup_worker.cmd

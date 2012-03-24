@@ -26,10 +26,15 @@ html
 
             #account
                 - if (!user)
-                    span Sign in with 
-                    a(href='/auth/github') GitHub 
-                    a(href='/auth/twitter') twitter 
-                    a(href='/auth/facebook') facebook 
+                    ul
+                        li
+                            span Sign in with 
+                        li 
+                            a(href='/auth/github') github 
+                        li 
+                            a(href='/auth/twitter') twitter 
+                        li 
+                            a(href='/auth/facebook') facebook 
 
                 - else
                     .username= user.name
