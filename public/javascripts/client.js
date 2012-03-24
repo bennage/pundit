@@ -6,12 +6,6 @@
 		context = '',
 		store = [];
 
-	function to_path(chain) {
-		return chain.map(function(x) {
-			return '[' + $(x).index() + ':' + x.localName + ':' + x.id + ']';
-		}).join();
-	}
-
 	function handle_comment(evt) {
 		var el = $(evt.currentTarget);
 		var comment = el.parents('.comment');
@@ -44,8 +38,6 @@
 		var el = $(evt.currentTarget);
 		var body = $('#comments .comment-body').text();
 		var target = focus;
-		var chain = target.parentsUntil('section').andSelf().toArray();
-		var path = to_path(chain.slice(1));
 		var hash = target.data('hash');
 		var btn = $('#save');
 		var status = $('#comment-status');
@@ -62,7 +54,6 @@
 		var comment = {
 			hash: hash,
 			regarding: target.text(),
-			path: path,
 			body: body
 		};
 
@@ -81,9 +72,9 @@
 		});
 	}
 
-	function matching(path) {
+	function matching(hash) {
 		return store.filter(function(x) {
-			return x.path === path;
+			return x.hash === hash;
 		});
 	}
 
@@ -124,7 +115,7 @@
 	}
 
 	function set_focus(target, chain) {
-		var path = target.data('path');
+		var hash = target.data('hash');
 		var history = $('#comments .history');
 		var body = $('#comments .comment-body');
 		var editor = $('#comment-editor');
@@ -148,7 +139,7 @@
 		editor.show('fast');
 
 		var template = $('#tmpl-comment').html();
-		var set = matching(path);
+		var set = matching(hash);
 		set.forEach(function(x) {
 			x.timestampFormatted = function() {
 				return how_long_since(x.when, now);
@@ -185,15 +176,9 @@
 
 		$(root).find(elems).each(function() {
 			var el = $(this);
-
-			var chain = el.parentsUntil('section').andSelf().toArray();
-			var path = to_path(chain.slice(1));
-
-			el.attr('data-path', path);
-
 			var content = (this.nodeName === 'IMG') ? this.src : this.innerText;
 			content = content.toLowerCase().replace(/[^a-z0-9]+/g, '');
-			el.data('hash', md5(content));
+			el.attr('data-hash', md5(content));
 		});
 	}
 
@@ -202,8 +187,11 @@
 		$('#comments .comments-stats').text(store.length + ' total comment(s)');
 
 		store.forEach(function(x) {
-			var selector = '[data-path="' + x.path + '"]';
-			$(selector).addClass('has-comments');
+			var selector = '[data-hash="' + x.hash + '"]';
+			var el = $(selector);
+			var count = parseInt((el.attr('data-count') || 0), 10);
+			el.addClass('has-comments');
+			el.attr('data-count', 1 + count);
 		});
 	}
 

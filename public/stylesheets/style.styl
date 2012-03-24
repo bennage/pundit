@@ -67,7 +67,10 @@ body
 	vendor(box-shadow, 0px 0px 20px highlight)
 
 .has-comments:before
-	content ' '
+	content attr(data-count);
+	font-size 10px
+	text-align center
+	font-family monospace
 	display block
 	background-image url(/comment_yellow.gif)
 	position absolute
