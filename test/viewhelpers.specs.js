@@ -64,13 +64,13 @@ module.exports = {
 		});
 	},
 
-	'helper exposes login when user is present': function() {
+	'helper exposes the pundit-specific login when user is present': function() {
 		testHelper(function(helper) {
 
 			var request = {
 				context: {
 					user: {
-						login: 'some_user'
+						__pundit_id__: 'some_user'
 					}
 				}
 			};
