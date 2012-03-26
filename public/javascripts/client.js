@@ -1,6 +1,6 @@
 (function() {
 
-	var elems = 'h1,h2,h3,h4,h5,h6,p,img',
+	var elems = 'h1,h2,h3,h4,h5,h6,p,img,li',
 		root = '#for-review',
 		focus = null,
 		context = '',
