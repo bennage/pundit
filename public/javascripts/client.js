@@ -72,7 +72,9 @@
 			comment.author_avatar_url = pundit.user.__pundit_avatar_url__;
 
 			store.push(comment);
-			target.addClass('has-comments');
+
+			incrementCount(target);
+
 			btn.removeAttr('disabled');
 			status.text('comment saved').fadeIn('fast').delay(3000).fadeOut('slow');
 		});
@@ -196,6 +198,12 @@
 		});
 	}
 
+	function incrementCount(el) {
+		var count = parseInt((el.attr('data-count') || 0), 10);
+		el.attr('data-count', 1 + count);
+		el.addClass('has-comments');
+	}
+
 	function associate_existing_comments() {
 
 		$('#comments .comments-stats').text(store.length + ' total comment(s)');
@@ -203,9 +211,7 @@
 		store.forEach(function(x) {
 			var selector = '[data-hash="' + x.hash + '"]';
 			var el = $(selector);
-			var count = parseInt((el.attr('data-count') || 0), 10);
-			el.addClass('has-comments');
-			el.attr('data-count', 1 + count);
+			incrementCount(el);
 		});
 	}
 
