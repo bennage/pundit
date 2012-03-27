@@ -1,10 +1,16 @@
 (function() {
 
-	var elems = 'h1,h2,h3,h4,h5,h6,p,img,li',
-		root = '#for-review',
+	var $elems, elems = 'h1,h2,h3,h4,h5,h6,p,.img,li',
+		$root, root = '#for-review',
 		focus = null,
 		context = '',
 		store = [];
+
+	function get_elements() {
+		return $root.find(elems).filter(function(idx, el) {
+			return $(el).children(elems).length === 0;
+		});
+	}
 
 	function handle_comment(evt) {
 		var el = $(evt.currentTarget);
@@ -24,8 +30,8 @@
 		var comment = el.parents('.comment');
 		var hash = comment.data('comment-id');
 
-		if(!confirm('Are you sure?')) return;
-		
+		if (!confirm('Are you sure?')) return;
+
 		el.attr('disabled', 'disabled');
 
 		$.post('/comment/delete/' + context + '/' + hash, {}, function(data, textStatus, jqXHR) {
@@ -53,7 +59,7 @@
 
 		var comment = {
 			hash: hash,
-			regarding: target.text(),
+			regarding: get_regarding_text(target),
 			body: body
 		};
 
@@ -172,13 +178,21 @@
 		});
 	}
 
+
+	function get_regarding_text(el) {
+		return el.is('.img') ? el.find('img').attr('src') : el.text().toLowerCase().replace(/[^a-z0-9]+/g, '');
+	}
+
+	function hash_content(el) {
+		var content = get_regarding_text(el);
+		return md5(content);
+	}
+
 	function mark_document_elements() {
 
-		$(root).find(elems).each(function() {
+		$elems.each(function() {
 			var el = $(this);
-			var content = (this.nodeName === 'IMG') ? this.src : this.innerText;
-			content = content.toLowerCase().replace(/[^a-z0-9]+/g, '');
-			el.attr('data-hash', md5(content));
+			el.attr('data-hash', hash_content(el));
 		});
 	}
 
@@ -241,16 +255,17 @@
 
 		$.getJSON('/document/' + context, function(data) {
 
-			var article = $(root);
+			$root.html(data.content);
+			//wrap all img tags in a div
+			$root.find('img').wrap('<div class="img"></div>');
+			$elems = get_elements();
 
-			article.html(data.content);
-
-			article.find(elems).click(function() {
+			$elems.click(function() {
 				var target = $(this);
 				set_focus(target);
 			});
 
-			article.find(elems).hover(function() {
+			$elems.hover(function() {
 				$(this).addClass('highlight');
 			}, function() {
 				$(this).removeClass('highlight');
@@ -283,6 +298,8 @@
 	}
 
 	$(function() {
+
+		$root = $(root);
 
 		History.Adapter.bind(window, 'statechange', function() {
 			document_has_changed();
