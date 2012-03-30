@@ -1,10 +1,10 @@
 script#tmpl-comment(type='text/html')
-	.comment(data-comment-id='{{hash}}', class='{{#handled}}handled{{/handled}}')
+	.comment(data-comment-id='{{hash}}', class='{{#handled}}handled{{/handled}}', title='{{regarding}}')
 		.author
 			img(src='{{author_avatar_url}}', title='{{author_name}}')
 			span.login(title='{{author_name}}') {{author_name}}
 			span.timestamp(title='{{when}}') {{timestampFormatted}}
-		p.body(title='{{regarding}}') {{body}}
+		p.body {{body}}
 		- if (user && user.__pundit_role__ === 'admin')
 			.commands
 				{{^handled}}

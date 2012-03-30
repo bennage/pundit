@@ -182,11 +182,11 @@
 
 
 	function get_regarding_text(el) {
-		return el.is('.img') ? el.find('img').attr('src') : el.text().toLowerCase().replace(/[^a-z0-9]+/g, '');
+		return el.is('.img') ? el.find('img').attr('src') : el.text();
 	}
 
 	function hash_content(el) {
-		var content = get_regarding_text(el);
+		var content = get_regarding_text(el).toLowerCase().replace(/[^a-z0-9]+/g, '');
 		return md5(content);
 	}
 
