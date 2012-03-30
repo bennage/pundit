@@ -153,7 +153,7 @@
 				return how_long_since(x.when, now);
 			};
 
-			if (x.author_login === pundit.user.__pundit_id__) {
+			if (pundit.user && x.author_login === pundit.user.__pundit_id__) {
 				body.text(x.body);
 			} else {
 				var out = Mustache.render(template, x);
