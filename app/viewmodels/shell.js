@@ -9,7 +9,8 @@
         activate: function () {
             router.map([
                 { route: '', title:'Welcome', moduleId: 'viewmodels/welcome', nav: true },
-              { route: ':owner/:repo', moduleId: 'viewmodels/repository' }
+                { route: ':owner/:repo', moduleId: 'viewmodels/repository' },
+                { route: 'document/:sha1/*path', moduleId: 'viewmodels/document' }
             ]).buildNavigationModel();
 
             return router.activate();
