@@ -31,7 +31,7 @@ module.exports = function (grunt) {
                 ]
             },
             options: {
-                name: '../lib/durandal-almond/almond',
+                name: '../node_modules/almond/almond',
                 baseUrl: '<%= paths.app %>/',
                 mainPath: '<%= paths.app %>/main.js',
                 out: '<%= paths.build %>/<%= paths.js %>/app.js',
@@ -85,11 +85,11 @@ module.exports = function (grunt) {
                      {
                         src: 'lib/bootstrap/less/bootstrap.less',
                         dest: '<%= paths.temp %>/<%= paths.css %>/bootstrap.css'
-                    }, 
+                    },
                      {
                         src: 'lib/font-awesome/less/font-awesome.less',
                         dest: '<%= paths.temp %>/<%= paths.css %>/font-awesome.css'
-                    } 
+                    }
                 ]
             },
             watch: {
@@ -381,13 +381,13 @@ module.exports = function (grunt) {
         concurrent: {
             server: [
                 'less:watch',
-                
+
                 'copy:watch'
             ],
             release: [
                 'durandal',
                 'less:release',
-                
+
                 'copy:release',
                 'imagemin',
                 'svgmin'
