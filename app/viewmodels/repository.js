@@ -32,7 +32,12 @@
     this.nodes = {};
     this.source = null;
     this.name = name;
+    this.expanded = ko.observable(false);
   }
+
+  Node.prototype.toggle = function(){
+    this.expanded( !this.expanded() );
+  };
 
   Node.prototype.isFolder = function(){
     return this.source.type === 'tree';
@@ -58,7 +63,6 @@
     };
 
     return {
-        displayName: 'Comment',
         sha: ko.observable('loading'),
         tree: ko.observable({}),
 
