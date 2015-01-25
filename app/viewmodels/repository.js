@@ -46,11 +46,11 @@
 
     for(property in this.nodes){
       current = this.nodes[property];
-      var set = (current.source.type === 'folder') ? folders : files;
+      var set = current.isFolder() ? folders : files;
       set.push(current);
     }
 
-    // why does this not render in the order I'm expecting?
+    // folders should appear before files
     return folders.concat(files);
   };
 
