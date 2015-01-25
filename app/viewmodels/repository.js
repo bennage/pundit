@@ -18,7 +18,7 @@
       var current = root;
 
       segments.forEach(function(segment){
-        current.nodes[segment] = current.nodes[segment] || new Node(segment, current);
+        current.nodes[segment] = current.nodes[segment] || new Node(segment);
         current = current.nodes[segment];
       });
 
@@ -28,11 +28,10 @@
     return root;
   }
 
-  function Node(name, parent){
+  function Node(name){
     this.nodes = {};
     this.source = null;
     this.name = name;
-    this.parent = parent;
   }
 
   Node.prototype.isFolder = function(){
@@ -55,10 +54,7 @@
   };
 
     Node.prototype.fullPath = function() {
-        if (!this.parent) {
-            return '';
-        }
-        return this.parent.fullPath() + '/' + this.name;
+        return '/' + this.source.path;
     };
 
     return {
