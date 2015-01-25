@@ -35,7 +35,7 @@
   }
 
   Node.prototype.isFolder = function(){
-    return this.source.type === 'folder';
+    return this.source.type === 'tree';
   };
 
   Node.prototype.nodesToArray = function(){
@@ -45,13 +45,17 @@
 
     for(property in this.nodes){
       current = this.nodes[property];
-      var set = (current.source.type === 'folder') ? folders : files;
+      var set = current.isFolder() ? folders : files;
       set.push(current);
     }
 
-    // why does this not render in the order I'm expecting?
+    // folders should appear before files
     return folders.concat(files);
   };
+
+    Node.prototype.fullPath = function() {
+        return '/' + this.source.path;
+    };
 
     return {
         displayName: 'Comment',
@@ -76,8 +80,8 @@
           });
         },
 
-        select: function(item) {
-          debugger;
+        linkFromPath: function(path) {
+            return '#document/' + this.sha() + path;
         }
     };
 });
