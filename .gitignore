@@ -1,3 +1,7 @@
 node_modules
 .build
 npm-debug.log
+
+# this is assumed to be generated, I'd rather have a more
+# convention-based approach though... maybe later
+css/styles.css
