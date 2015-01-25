@@ -67,54 +67,12 @@ module.exports = function (grunt) {
             }
         },
 
-        // Build less files into css ones
-        less: {
-            release: {
-                options: {
-                    paths: ['lib/bootstrap/less/'],
-                    cleancss: true
-                },
-                files: [
-                    {
-                        expand: true,
-                        cwd: '<%= paths.css %>/',
-                        src: '*.less',
-                        dest: '<%= paths.build %>/<%= paths.css %>/',
-                        ext: '.css'
-                    },
-                     {
-                        src: 'lib/bootstrap/less/bootstrap.less',
-                        dest: '<%= paths.temp %>/<%= paths.css %>/bootstrap.css'
-                    },
-                     {
-                        src: 'lib/font-awesome/less/font-awesome.less',
-                        dest: '<%= paths.temp %>/<%= paths.css %>/font-awesome.css'
-                    }
-                ]
-            },
-            watch: {
-                options: {
-                    paths: ['lib/bootstrap/less/'],
-                    sourceMap: true
-                },
-                files: [
-                    {
-                        expand: true,
-                        cwd: '<%= paths.css %>/',
-                        src: '*.less',
-                        dest: '<%= paths.temp %>/<%= paths.css %>/',
-                        ext: '.css'
-                    },
-                    {
-                        src: 'lib/bootstrap/less/bootstrap.less',
-                        dest: '<%= paths.temp %>/<%= paths.css %>/bootstrap.css'
-                    },
-                    {
-                        src: 'lib/font-awesome/less/font-awesome.less',
-                        dest: '<%= paths.temp %>/<%= paths.css %>/font-awesome.css'
-                    }
-                ]
+        stylus: {
+          compile: {
+            files: {
+              '<%= paths.css %>/styles.css': ['stylus/*.styl'] // compile and concat into single file
             }
+          }
         },
 
         // Build HTML File by transforming every development source to production ones
@@ -241,6 +199,7 @@ module.exports = function (grunt) {
                 }]
             }
         },
+
         svgmin: {
             release: {
                 files: [{
@@ -251,6 +210,7 @@ module.exports = function (grunt) {
                 }]
             }
         },
+
         htmlmin: {
             release: {
                 options: {
@@ -297,21 +257,19 @@ module.exports = function (grunt) {
                     livereload: true
                 }
             },
+            css: {
+              files: ['stylus/*.styl'],
+              tasks: ['stylus'],
+              options: {
+                livereload: true
+              }
+            },
             test: {
                 files: ['<%= paths.test %>/spec/*.js'],
                 tasks: ['connect:test', 'jasmine']
             },
             gruntfile: {
                 files: ['Gruntfile.js']
-            },
-
-            less: {
-                files: [
-                    '<%= paths.css %>/*.less',
-                    'lib/bootstrap/less/*.less',
-                    'lib/font-awesome/font-awesome.less',
-                ],
-                tasks: ['less:watch', 'autoprefixer:watch']
             },
 
             livereload: {
@@ -380,13 +338,10 @@ module.exports = function (grunt) {
         // Run some tasks in parallel to speed up build process
         concurrent: {
             server: [
-                'less:watch',
-
                 'copy:watch'
             ],
             release: [
                 'durandal',
-                'less:release',
 
                 'copy:release',
                 'imagemin',
