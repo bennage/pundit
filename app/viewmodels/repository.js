@@ -18,7 +18,7 @@
       var current = root;
 
       segments.forEach(function(segment){
-        current.nodes[segment] = current.nodes[segment] || new Node(segment);
+        current.nodes[segment] = current.nodes[segment] || new Node(segment, current);
         current = current.nodes[segment];
       });
 
@@ -28,14 +28,15 @@
     return root;
   }
 
-  function Node(name){
+  function Node(name, parent){
     this.nodes = {};
     this.source = null;
     this.name = name;
+    this.parent = parent;
   }
 
   Node.prototype.isFolder = function(){
-    return this.source.type === 'folder';
+    return this.source.type === 'tree';
   };
 
   Node.prototype.nodesToArray = function(){
@@ -52,6 +53,13 @@
     // why does this not render in the order I'm expecting?
     return folders.concat(files);
   };
+
+    Node.prototype.fullPath = function() {
+        if (!this.parent) {
+            return '';
+        }
+        return this.parent.fullPath() + '/' + this.name;
+    };
 
     return {
         displayName: 'Comment',
@@ -76,8 +84,8 @@
           });
         },
 
-        select: function(item) {
-          debugger;
+        linkFromPath: function(path) {
+            return '#document/' + this.sha() + path;
         }
     };
 });

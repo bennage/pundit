@@ -4,11 +4,13 @@
 
   <script id="itemTmpl" type="text/html">
     <li>
-      <a href="#" data-bind="click:$parent.select">
+      <!-- ko if: !isFolder() -->
+      <a data-bind="attr: { href: $root.linkFromPath($data.fullPath($data)) }">
         <span data-bind="text: name"></span>
       </a>
-
-      <!-- ko if: isFolder -->
+      <!-- /ko -->
+      <!-- ko if: isFolder() -->
+      <span data-bind="text: name"></span>
       <ul data-bind="template: { name: 'itemTmpl', foreach: nodesToArray() }"></ul>
       <!-- /ko -->
     </li>
