@@ -1,17 +1,18 @@
 'use strict';
 define(['plugins/http', 'durandal/app', 'knockout', '../modules/github'], function (http, app, ko, Github) {
     var github = new Github();
-    var owner;
-    var repo;
 
     return {
-        sha: ko.observable('loading'),
+        owner: ko.observable(''),
+        repo: ko.observable(''),
+        sha: ko.observable(''),
         tree: ko.observable({}),
 
-        activate: function (o, r) {
+        activate: function (owner, repo) {
           var self = this;
-          repo = r;
-          owner = o;
+
+          self.owner(owner);
+          self.repo(repo);
 
           return github.fetchRepository(owner, repo).then(function(rootNode) {
               self.sha(rootNode.sha);
