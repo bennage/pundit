@@ -6,7 +6,7 @@
     <li>
       <!-- ko if: !isFolder() -->
       <i class="fa fa-file-o"></i>
-      <a data-bind="attr: { href: $root.linkFromPath($data.fullPath($data)) }">
+      <a data-bind="attr: { href: '#document/' + $root.owner() + '/' + $root.repo() + '/' + source.sha }">
         <span data-bind="text: name"></span>
       </a>
       <!-- /ko -->
