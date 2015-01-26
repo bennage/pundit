@@ -1,11 +1,18 @@
-'use strict';
+﻿'use strict';
 define(['plugins/http', 'durandal/app', 'knockout', '../modules/github'], function (http, app, ko, Github) {
-    var github = new Github();
+    var github = Github.instance;
+
+    // defining these in the function scope as linkToDocument is not
+    // called in the right context, and this is cleaner than a bind in
+    // the template
+    var repositoryOwner =  ko.observable('');
+    var repositoryName = ko.observable('');
+    var commitSha = ko.observable('');
 
     return {
-        owner: ko.observable(''),
-        repo: ko.observable(''),
-        sha: ko.observable(''),
+        owner: repositoryOwner,
+        repo: repositoryName,
+        sha: commitSha,
         tree: ko.observable({}),
 
         activate: function (owner, repo) {
@@ -15,13 +22,17 @@ define(['plugins/http', 'durandal/app', 'knockout', '../modules/github'], functi
           self.repo(repo);
 
           return github.fetchRepository(owner, repo).then(function(rootNode) {
-              self.sha(rootNode.sha);
+              self.sha(rootNode.shortSha);
               self.tree(rootNode);
           });
         },
 
-        linkFromPath: function(path) {
-            return '#document/' + owner + '/' + repo + '/' + this.sha() + path;
+        linkToDocument: function(document) {
+            return '#document/' +
+                repositoryOwner() + '/' +
+                repositoryName() + '/' +
+                commitSha() + '/' +
+                document.fullPath();
         }
     };
 });
