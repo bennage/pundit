@@ -1,69 +1,67 @@
 'use strict';
 define(['knockout', 'durandal/system', 'plugins/http'], function(ko, system, http) {
-    var Node = (function() {
-        function Node(name){
-            this.nodes = {};
-            this.source = null;
-            this.name = name;
-            this.expanded = ko.observable(false);
-        }
 
-        Node.unflatten = function(flat_tree){
-            // `flat_tree` should be a 1 dimensional array
-            // each item in the array has a `path` describing
-            // its location in the expanded tree.
-            // `path` is delimited by /
+    function Node(name){
+        this.nodes = {};
+        this.source = null;
+        this.name = name;
+        this.expanded = ko.observable(false);
+    }
 
-            // `nodes` is an {} instead of an array
-            // this simplifies the unflattening process
-            // but complicates binding
-            // we'll convert it [] after the fact,
-            // but maybe there's a better way?
-            var root = new Node();
+    Node.unflatten = function(flat_tree){
+        // `flat_tree` should be a 1 dimensional array
+        // each item in the array has a `path` describing
+        // its location in the expanded tree.
+        // `path` is delimited by /
 
-            flat_tree.forEach(function(item) {
-                var segments = item.path.split('/');
-                var current = root;
+        // `nodes` is an {} instead of an array
+        // this simplifies the unflattening process
+        // but complicates binding
+        // we'll convert it [] after the fact,
+        // but maybe there's a better way?
+        var root = new Node();
 
-                segments.forEach(function(segment){
-                    current.nodes[segment] = current.nodes[segment] || new Node(segment);
-                    current = current.nodes[segment];
-                });
+        flat_tree.forEach(function(item) {
+            var segments = item.path.split('/');
+            var current = root;
 
-                current.source = item;
+            segments.forEach(function(segment){
+                current.nodes[segment] = current.nodes[segment] || new Node(segment);
+                current = current.nodes[segment];
             });
 
-            return root;
-        };
+            current.source = item;
+        });
 
-        Node.prototype.isFolder = function(){
-            return this.source.type === 'tree';
-        };
+        return root;
+    };
 
-        Node.prototype.toggle = function(){
-          this.expanded( !this.expanded() );
-        };
+    Node.prototype.isFolder = function(){
+        return this.source.type === 'tree';
+    };
 
-        Node.prototype.nodesToArray = function(){
-            var folders = [];
-            var files = [];
-            var property, current;
+    Node.prototype.toggle = function(){
+      this.expanded( !this.expanded() );
+    };
 
-            for(property in this.nodes){
-                current = this.nodes[property];
-                var set = current.isFolder() ? folders : files;
-                set.push(current);
-            }
+    Node.prototype.nodesToArray = function(){
+        var folders = [];
+        var files = [];
+        var property, current;
 
-            // folders should appear before files
-            return folders.concat(files);
-        };
+        for(property in this.nodes){
+            current = this.nodes[property];
+            var set = current.isFolder() ? folders : files;
+            set.push(current);
+        }
 
-        Node.prototype.fullPath = function() {
-            return '/' + this.source.path;
-        };
+        // folders should appear before files
+        return folders.concat(files);
+    };
 
-        return Node;
-    })();
+    Node.prototype.fullPath = function() {
+        return '/' + this.source.path;
+    };
+
     return Node;
 });
