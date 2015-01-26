@@ -5,7 +5,7 @@ define(['plugins/http', 'durandal/app', 'knockout'], function (http, app, ko) {
     return {
         sha1: sha1,
         path: path,
-        activate: function(routeSha1, routePath) {
+        activate: function(routeOwner, routeRepo, routeSha1, routePath) {
             sha1(routeSha1);
             path(routePath);
         }
