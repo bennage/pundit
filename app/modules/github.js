@@ -17,8 +17,9 @@ define(['knockout', 'durandal/system', 'plugins/http', './node'], function(ko, s
       // todo: the desired sha should be provided by
       // the owner requesting the feedback
 
-      // todo: check self.repositories to see if the requested sha1
-      // has already been loaded. If so, wrap in a promise and go.
+        if (sha1 && sha1 !== '' && self.repositories[sha1]) {
+            return system.defer(function(cb) { cb.resolve(self.repositories[sha1]); });
+        }
 
         sha1 = sha1 || 'master';
         var url = base_url + 'repos/' + owner + '/' + repo + '/git/trees/' + sha1 + '?recursive=1';
