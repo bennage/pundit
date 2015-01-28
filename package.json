@@ -23,6 +23,7 @@
     "grunt-svgmin": ">=0.2.0",
     "jshint-stylish": ">=0.1.5",
     "load-grunt-tasks": ">=0.3.0",
+    "mocha": "^2.1.0",
     "stylus": "^0.49.3",
     "time-grunt": ">=0.2.8"
   },
@@ -30,5 +31,8 @@
     "node": ">=0.8.0",
     "npm": ">=1.2.10"
   },
-  "private": "true"
+  "private": "true",
+  "scripts": {
+    "test": "mocha"
+  }
 }
