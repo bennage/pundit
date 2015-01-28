@@ -60,7 +60,31 @@ define(['knockout', 'durandal/system', 'plugins/http'], function(ko, system, htt
     };
 
     Node.prototype.fullPath = function() {
-        return '/' + this.source.path;
+        return this.source.path;
+    };
+
+    // might make more sense to keep the original response in memory,
+    // rather than recurse back through the tree we built.
+    Node.prototype.lookupFileByPath = function(path) {
+        if (!path || path.length === 0) { return null; }
+        var i;
+        var segments = path.split('/', 1);
+        var restOfPath = path.substring(segments[0].length + 1);
+        var childNode = this.nodes[segments[0]];
+        if (!childNode) {
+            return null;
+        } else if (childNode.isFolder()) {
+            return childNode.lookupFileByPath(restOfPath);
+        } else {
+            return childNode;
+        }
+    };
+
+    Node.prototype.blobSha = function() {
+        if (this.isFolder()) {
+            throw "Called blobSha on a folder";
+        }
+        return this.source.sha;
     };
 
     return Node;
