@@ -1,4 +1,4 @@
-define(['plugins/http', 'durandal/app', 'knockout', '../modules/github'], function (http, app, ko, Github) {
+define(['plugins/http', 'durandal/app', 'knockout', '../modules/github', '../../lib/marked'], function (http, app, ko, Github, marked) {
 
     var github = Github.instance;
     var sha1 = ko.observable();
@@ -7,7 +7,7 @@ define(['plugins/http', 'durandal/app', 'knockout', '../modules/github'], functi
     return {
         sha1: sha1,
         path: path,
-        content: ko.observable('loading...'),
+        content: ko.observableArray(),
         activate: function(routeOwner, routeRepo, routeSha1, routePath) {
             var self = this;
 
@@ -15,8 +15,21 @@ define(['plugins/http', 'durandal/app', 'knockout', '../modules/github'], functi
             path(routePath);
 
             github.fetchRawFile(routeOwner, routeRepo, routeSha1, routePath).then(function(content){
-              self.content(content);
+                var markup = marked(content);
+                var wrapper = document.createElement('span');
+                wrapper.innerHTML = markup;
+                var elements = [];
+                var i;
+                for(i = 0; i < wrapper.childNodes.length; i++) {
+                    elements.push({ lineNumber: wrapper.childNodes[i].dataset ? parseInt(wrapper.childNodes[i].dataset.lineNumber, 10) : 0,
+                                    comments: ko.observableArray(),
+                                    markup: wrapper.childNodes[i].outerHTML });
+                }
+                self.content(elements);
             });
+        },
+        contentClick: function(data, event) {
+            data.comments.push('foo');
         }
     };
 });

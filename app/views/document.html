@@ -1,4 +1,9 @@
 <div>
-  <code data-bind="text: sha1"></code>
-  <pre data-bind="text: content"></pre>
+  <div data-bind="foreach: content">
+    <div data-bind="html: markup, click: $parent.contentClick"></div>
+
+    <ul data-bind="foreach: comments" class="comments">
+      <li class="comment">foo</li>
+    </ul>
+  </div>
 </div>
