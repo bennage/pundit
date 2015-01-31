@@ -3,7 +3,20 @@
     <div data-bind="html: markup, click: $parent.contentClick"></div>
 
     <ul data-bind="foreach: comments" class="comments">
-      <li class="comment">foo</li>
+      <!-- ko if: newComment -->
+      <li class="comment new-comment">
+        <div class="form-group">
+          <h3>Add a new comment.</h3>
+          <textarea data-bind="value: content" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-default" data-bind="click: save">Post</button>
+        </div>
+      </li>
+      <!-- /ko -->
+      <!-- ko if: !newComment() -->
+      <li class="comment" data-bind="text: content"></li>
+      <!-- /ko -->
     </ul>
   </div>
 </div>

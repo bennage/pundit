@@ -1,4 +1,5 @@
-define(['plugins/http', 'durandal/app', 'knockout', '../modules/github', '../../lib/marked'], function (http, app, ko, Github, marked) {
+define(['plugins/http', 'durandal/app', 'knockout', '../modules/github', '../modules/comment', '../../lib/marked'],
+       function (http, app, ko, Github, Comment, marked) {
 
     var github = Github.instance;
     var sha1 = ko.observable();
@@ -29,7 +30,9 @@ define(['plugins/http', 'durandal/app', 'knockout', '../modules/github', '../../
             });
         },
         contentClick: function(data, event) {
-            data.comments.push('foo');
+            var newComment = new Comment();
+            newComment.newComment(true);
+            data.comments.push(newComment);
         }
     };
 });
