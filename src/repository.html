@@ -1,0 +1,27 @@
+<template>
+
+	<div title="${sha}">
+		<i class="fa fa-sitemap"></i>
+		<a href="http://github.com/${owner}/${repo}" target="_new">${owner}/${repo}</a>
+	</div>
+
+	<div class="repository">
+
+		<section class="tree">
+			<ul>
+				<template repeat.for="node of tree.nodesToArray()">
+					<compose
+						model.bind="node"
+						view="node.html">
+					</compose>
+				</template>
+			</ul>
+		</section>
+
+		<section class="document">
+			<router-view></router-view>
+		</section>
+
+	</div>
+
+</template>

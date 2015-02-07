@@ -1,0 +1,24 @@
+<template>
+
+    <li if.bind="!node.isFolder">
+        <i class="fa fa-file-o"></i>
+        <a href="#/${node.url}">
+            <span>${node.name}</span>
+        </a>
+    </li>
+
+    <li if.bind="node.isFolder">
+        <i class="fa ${node.expanded ? 'fa-folder-open' : 'fa-folder-o'}"></i>
+        <span click.delegate="node.toggle()">${node.name}</span>
+
+        <ul class="${node.expanded ? '' : 'hide'}">
+            <template repeat.for="node of node.nodesToArray()">
+                <compose
+                    model.bind="node"
+                    view="node.html">
+                </compose>
+            </template>
+        </ul>
+    </li>
+
+</template>
