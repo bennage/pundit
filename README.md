@@ -1,4 +1,6 @@
 # Pundit
+
+[![Join the chat at https://gitter.im/bennage/pundit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bennage/pundit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Enabling community discussion on markdown files hosted on GitHub leveraging
 [Disqus](https://disqus.com).
 
