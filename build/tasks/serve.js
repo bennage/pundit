@@ -28,6 +28,6 @@ gulp.task('serve', ['build'], function () {
     // gulp.watch(['app/scripts/**/*.js'], ['jshint']);
 
     // TODO: I think that something is wrong here...
-    // you'll if you edit app while serving 
-    gulp.watch(['server/app.js', 'routes/**/*.js'], [server.run]);
+    // you'll if you edit app while serving
+    gulp.watch(['server/app.js', 'server/routes/**/*.js'], [server.run]);
 });

@@ -16,6 +16,10 @@ var routes = require('./routes/index'),
 
 var app = express();
 
+// NOTE: We're not using a view engine, but Express complains if these are missing
+app.set('view engine', 'jade');
+app.set('views', './views');
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(morgan('dev'));
