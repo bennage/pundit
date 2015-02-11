@@ -3,11 +3,12 @@ require('6to5/register');
 var express = require('express'),
     path = require('path'),
     favicon = require('serve-favicon'),
-    logger = require('morgan'),
+    morgan = require('morgan'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     session = require('express-session');
 
+var logger = require('./logger');
 var auth = require('./auth');
 
 var routes = require('./routes/index'),
@@ -21,14 +22,21 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
-app
-    .use(logger('dev'))
-    .use(bodyParser.json())
-    .use(bodyParser.urlencoded({ extended: false }))
-    .use(cookieParser())
-    .use(express.static(path.join(__dirname, 'public')))
-    .use(session( { secret: 'bennage', resave: false, saveUninitialized: false }))
-    .use(auth(app));
+app.use(morgan('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+
+if (app.get('env') == 'development') {
+    logger.log('starting browser-sync');
+    var browserSync = require('browser-sync');
+    var bs = browserSync.init([], {});
+    app.use(require('connect-browser-sync')(bs));
+}
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(session( { secret: 'bennage', resave: false, saveUninitialized: false }));
+app.use(auth(app));
 
 app.use('/', routes);
 app.use('/users', users);
