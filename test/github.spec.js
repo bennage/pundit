@@ -46,7 +46,7 @@ describe('the GitHub module', () => {
 			var http = new HttpStub();
 			var github = new GitHub(http);
 
-			github.fetchRepository(OWNER,REPO,SHA).then(response => {
+			github.fetchStore(OWNER,REPO,SHA).then(response => {
 				expect(http.url).toBe(`repos/${OWNER}/${REPO}/git/trees/${SHA}?recursive=1`);
 				done();
 			});
@@ -56,7 +56,7 @@ describe('the GitHub module', () => {
 			var http = new HttpStub();
 			var github = new GitHub(http);
 
-			github.fetchRepository(OWNER,REPO).then(response => {
+			github.fetchStore(OWNER,REPO).then(response => {
 				expect(http.url).toBe(`repos/${OWNER}/${REPO}/git/trees/master?recursive=1`);
 				done();
 			});
@@ -66,7 +66,7 @@ describe('the GitHub module', () => {
 			var http = new HttpStub();
 			var github = new GitHub(http);
 
-			github.fetchRepository(OWNER,REPO,SHA).then(response => {
+			github.fetchStore(OWNER,REPO,SHA).then(response => {
 				expect(response.name).toBe('_root_');
 				expect(response.nodes).toBeDefined();
 				expect(response.nodes.file1).toBeDefined();
@@ -78,7 +78,7 @@ describe('the GitHub module', () => {
 			var http = new HttpStub();
 			var github = new GitHub(http);
 
-			github.fetchRepository(OWNER,REPO,SHA).then(response => {
+			github.fetchStore(OWNER,REPO,SHA).then(response => {
 				expect(response.sha).toBe(TREE_SHA);
 				done();
 			});
@@ -88,7 +88,7 @@ describe('the GitHub module', () => {
 			var http = new HttpStub();
 			var github = new GitHub(http);
 
-			github.fetchRepository(OWNER,REPO,SHA).then(response => {
+			github.fetchStore(OWNER,REPO,SHA).then(response => {
 				expect(response.shortSha).toBe('dd15628');
 				expect(response.shortSha.length).toBe(7);
 				done();
@@ -103,7 +103,7 @@ describe('the GitHub module', () => {
 
 			//NOTE: I don't know what good idiomatic JavaScript error handling looks like!
 
-			github.fetchRepository(OWNER,REPO,SHA).
+			github.fetchStore(OWNER,REPO,SHA).
 			then(response => {
 				throw new '`then` was invoked instead of `catch`';
 			}).
@@ -117,14 +117,14 @@ describe('the GitHub module', () => {
 			var http = new HttpStub();
 			var github = new GitHub(http);
 
-			github.fetchRepository(OWNER,REPO,TREE_SHA).
+			github.fetchStore(OWNER,REPO,TREE_SHA).
 				then(response1 => {
 					// after the 1st call completes, we make another
 					// TODO: I suspect there's a better way to do this...
 
 					expect(http.invoked).toBe(1);
 
-					github.fetchRepository(OWNER,REPO,TREE_SHA).
+					github.fetchStore(OWNER,REPO,TREE_SHA).
 						then(response2 => {
 							expect(http.invoked).toBe(1);
 							done();
@@ -139,12 +139,12 @@ describe('the GitHub module', () => {
 			var firstSHA = 'a1b23c';
 			var secondSHA = '3c2b1a';
 
-			github.fetchRepository(OWNER,REPO,firstSHA).
+			github.fetchStore(OWNER,REPO,firstSHA).
 				then(response1 => {
 
 					expect(http.invoked).toBe(1);
 
-					github.fetchRepository(OWNER,REPO,secondSHA).
+					github.fetchStore(OWNER,REPO,secondSHA).
 						then(response2 => {
 							expect(http.invoked).toBe(2);
 							done();

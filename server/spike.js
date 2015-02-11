@@ -3,7 +3,7 @@ var Q = require('q');
 
 require('6to5/register')
 
-var Repository = require('./Repository').Repository;
+var Store = require('./Store').Store;
 
 var host = process.env.PUNDIT_DOCDB_ENDPOINT;
 var masterKey = process.env.PUNDIT_DOCDB_KEY;
@@ -13,7 +13,7 @@ console.log('masterKey ' + masterKey);
 
 var client = new DocumentClient(host, { masterKey: masterKey });
 
-var repo = new Repository(client);
+var repo = new Store(client);
 
 var collectionDefinition = { id: '0a2ac7598e1cf74237c0aa80d8f965817d4bc1e5' };
 var documentDefinition = {

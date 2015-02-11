@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Repository } from '../server/Repository';
+import { Store } from '../server/Store';
 
 // we use Q instead of `Promise` because that's what the
 // DocumentDB client uses.
@@ -44,7 +44,7 @@ describe('A repository', () => {
 
         it('constructs the expected query', done => {
             var client = new DocumentClientStub();
-            var repo = new Repository(client);
+            var repo = new Store(client);
 
             const expected = `SELECT * FROM x WHERE x.id = '${database_id}'`;
 
@@ -63,7 +63,7 @@ describe('A repository', () => {
             var client = new DocumentClientStub();
 
             it('sets `exists` to false', done => {
-                var repo = new Repository(client);
+                var repo = new Store(client);
 
                 repo.databaseExists(database_id)
                     .then(response => {
@@ -76,7 +76,7 @@ describe('A repository', () => {
             });
 
             it('sets `database` to undefined', done => {
-                var repo = new Repository(client);
+                var repo = new Store(client);
 
                 repo.databaseExists(database_id)
                     .then(response => {
@@ -98,7 +98,7 @@ describe('A repository', () => {
             );
 
             it('sets `exists` to true', done => {
-                var repo = new Repository(client);
+                var repo = new Store(client);
 
                 repo.databaseExists(database_id)
                     .then(response => {
@@ -111,7 +111,7 @@ describe('A repository', () => {
             });
 
             it('sets `database` to defined', done => {
-                var repo = new Repository(client);
+                var repo = new Store(client);
 
                 repo.databaseExists(database_id)
                     .then(response => {
@@ -132,7 +132,7 @@ describe('A repository', () => {
 
         it('constructs the expected query', done => {
             var client = new DocumentClientStub();
-            var repo = new Repository(client);
+            var repo = new Store(client);
 
             const expected = `SELECT * FROM x WHERE x.id = '${collection_id}'`;
 
@@ -151,7 +151,7 @@ describe('A repository', () => {
             var client = new DocumentClientStub();
 
             it('sets `exists` to false', done => {
-                var repo = new Repository(client);
+                var repo = new Store(client);
 
                 repo.databaseExists(collection_id)
                     .then(response => {
@@ -164,7 +164,7 @@ describe('A repository', () => {
             });
 
             it('sets `collection` to undefined', done => {
-                var repo = new Repository(client);
+                var repo = new Store(client);
 
                 repo.databaseExists(collection_id)
                     .then(response => {
@@ -186,7 +186,7 @@ describe('A repository', () => {
             );
 
             it('sets `exists` to true', done => {
-                var repo = new Repository(client);
+                var repo = new Store(client);
 
                 repo.collectionExists(collection_id)
                     .then(response => {
@@ -199,7 +199,7 @@ describe('A repository', () => {
             });
 
             it('sets `collection` to defined', done => {
-                var repo = new Repository(client);
+                var repo = new Store(client);
 
                 repo.collectionExists(collection_id)
                     .then(response => {
@@ -222,7 +222,7 @@ describe('A repository', () => {
         it('acknowledges success', done => {
 
             var client = new DocumentClientStub();
-            var repo = new Repository(client);
+            var repo = new Store(client);
 
             repo
                 .persistComment(blobSha, comment)

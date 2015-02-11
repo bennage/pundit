@@ -21,7 +21,7 @@ export class App {
 			}, {
 				route: ':owner/:repo',
 				moduleId: 'repository',
-				title: 'Repository'
+				title: 'Store'
 			}]);
 		});
 

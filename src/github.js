@@ -30,7 +30,7 @@ export class GitHub {
 		});
 	}
 
-	fetchRepository (owner, repo, sha1) {
+	fetchStore (owner, repo, sha1) {
 		// todo: the desired sha should be provided by
 		// the owner requesting the feedback
 

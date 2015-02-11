@@ -1,7 +1,7 @@
 import { GitHub } from './github';
 import { Router } from 'aurelia-router';
 
-export class Repository{
+export class Store{
 
 	static inject() { return [GitHub, Router]; }
 
@@ -30,7 +30,7 @@ export class Repository{
 		this.repo = route.repo;
 
 		return this.github.
-			fetchRepository(route.owner, route.repo).
+			fetchStore(route.owner, route.repo).
 			then(response => {
 				self.sha = response.sha;
 				self.tree = response;

@@ -1,4 +1,4 @@
-export class Repository {
+export class Store {
 
     constructor (documentClient) {
         this.client = documentClient;
