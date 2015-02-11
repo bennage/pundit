@@ -10,9 +10,10 @@ gulp.task('serve', ['build'], function () {
     });
 
     // Restart the server when file changes
-    gulp.watch(['client/**/*.html'], ['build-html', browserSync.reload, server.notify]);
-    gulp.watch(['client/**/*.js'], ['build-system', browserSync.reload, server.notify]);
-    gulp.watch(['stylus/**/*.styl'], ['stylus', browserSync.reload, server.notify]);
+    gulp.watch(['client/**/*.html'], ['build-html']);
+    gulp.watch(['client/**/*.js'], ['build-system']);
+    gulp.watch(['stylus/**/*.styl'], ['stylus']);
+    // TODO: add back `browserSync.reload, server.notify` to the above
 
     // gulp.watch(['app/styles/**/*.scss'], ['styles:scss']);
     // //gulp.watch(['{.tmp,app}/styles/**/*.css'], ['styles:css', server.notify]);
@@ -29,5 +30,5 @@ gulp.task('serve', ['build'], function () {
 
     // TODO: I think that something is wrong here...
     // you'll if you edit app while serving
-    gulp.watch(['server/app.js', 'server/routes/**/*.js'], [server.run]);
+    // gulp.watch(['server/app.js', 'server/routes/**/*.js'], [server.run]);
 });
