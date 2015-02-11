@@ -46,11 +46,20 @@
     }
   },
   "dependencies": {
+    "body-parser": "~1.10.2",
+    "cookie-parser": "~1.3.3",
+    "debug": "~2.1.1",
     "documentdb": "^0.9.3",
     "documentdb-q-promises": "^0.9.3",
-    "q": "^1.1.2"
+    "express": "^4.11.2",
+    "jade": "~1.9.1",
+    "morgan": "~1.5.1",
+    "passport-github2": "^0.1.9",
+    "q": "^1.1.2",
+    "serve-favicon": "~2.2.0"
   },
   "scripts": {
-    "test": "node_modules/.bin/mocha ./server.specs/**.spec.js --compilers js:6to5/register --growl --watch"
+    "test": "node_modules/.bin/mocha ./server.specs/**.spec.js --compilers js:6to5/register --growl --watch",
+    "start": "server/bin/www"
   }
 }
