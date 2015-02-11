@@ -24,7 +24,7 @@ export class App {
 			}, {
 				route: ':owner/:repo',
 				moduleId: 'repository',
-				title: 'Store'
+				title: 'Repository'
 			}]);
 		});
 
@@ -44,7 +44,6 @@ export class App {
 			.then(response => {
 				var user = response.content;
 				self.user = user;
-				console.dir(user);
 			});
 	}
 }

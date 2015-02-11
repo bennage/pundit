@@ -1,7 +1,7 @@
 import { GitHub } from './github';
 import { Router } from 'aurelia-router';
 
-export class Store{
+export class Repository{
 
 	static inject() { return [GitHub, Router]; }
 
