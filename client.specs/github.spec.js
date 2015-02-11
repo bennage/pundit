@@ -1,5 +1,5 @@
 import { Headers } from 'aurelia-http-client';
-import { GitHub } from '../src/github';
+import { GitHub } from '../client/github';
 
 const TREE_SHA = 'dd15628c3ae3e14733019683733feb92c8fedf11';
 const OWNER = 'an-owner';
