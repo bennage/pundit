@@ -31,5 +31,4 @@ everyauth.github
     })
     .redirectPath('/');
 
-export var middleware = everyauth.middleware;
-export var helpExpress = everyauth.helpExpress;
+export default everyauth.middleware;

@@ -15,8 +15,6 @@ var routes = require('./routes/index'),
 
 var app = express();
 
-auth.helpExpress(app);
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -29,8 +27,8 @@ app
     .use(bodyParser.urlencoded({ extended: false }))
     .use(cookieParser())
     .use(express.static(path.join(__dirname, 'public')))
-    .use(session( { secret: 'bennage' }))
-    .use(auth.middleware(app));
+    .use(session( { secret: 'bennage', resave: false, saveUninitialized: false }))
+    .use(auth(app));
 
 app.use('/', routes);
 app.use('/users', users);
