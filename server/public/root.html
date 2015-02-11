@@ -18,8 +18,8 @@
 	<body aurelia-app>
 
 		<div class="splash">
-			<div class="message">Pundit</div>
-		  	<i class="fa fa-spinner fa-spin"></i>
+			<div class="message">Pundit!</div>
+			<i class="fa fa-spinner fa-spin"></i>
 		</div>
 
 		<script src="jspm_packages/system.js"></script>
@@ -28,6 +28,11 @@
 		<script>
 			System.baseUrl = 'dist'; //NOTE: You can move this into the config.js file, if you like.
 			System.import('aurelia-bootstrapper').catch(console.error.bind(console));
+		</script>
+
+		<!-- TODO: is this really necessary? -->
+		<script type='text/javascript' id="__bs_script__">
+		//<![CDATA[document.write("<script async src='//HOST:3001/browser-sync/browser-sync-client.1.9.1.js'><\/script>".replace(/HOST/g, location.hostname).replace(/PORT/g, location.port));//]]>
 		</script>
 
 	</body>

@@ -1,4 +1,4 @@
-import { Node } from '../src/Node';
+import { Node } from '../client/Node';
 
 describe('An unflattened tree', () => {
 
