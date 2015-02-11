@@ -57,7 +57,6 @@
     "everyauth": "^0.4.9",
     "express": "^4.11.2",
     "express-session": "^1.10.2",
-    "jade": "~1.9.1",
     "morgan": "~1.5.1",
     "q": "^1.1.2",
     "serve-favicon": "~2.2.0"

@@ -1,9 +1,0 @@
-extends layout
-
-block content
-  h1= title
-  p Welcome to #{title}
-  if everyauth.loggedIn
-    div= everyauth.user.name
-  else
-    a(href='/auth/github') login
