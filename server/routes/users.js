@@ -1,13 +1,13 @@
-var express = require('express');
+import express  from 'express';
+
 var router = express.Router();
 
-router.get('/', function(req, res, next) {
-    console.dir(req.user);
-    res.json(req.user);
+router.get('/', (req, res, next) => {
+    if(!req.user) {
+        res.status(401);
+    } else {
+        res.json(req.user);
+    }
 });
 
-router.get('/:id', function(req, res, next) {
-    res.send('child ' + req.params.id);
-});
-
-module.exports = router;
+export default router;

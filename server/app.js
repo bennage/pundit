@@ -38,7 +38,7 @@ app.use(session( { secret: 'bennage', resave: false, saveUninitialized: false })
 app.use(auth(app));
 
 app.use('/', routes);
-app.use('/users', users);
+app.use('/user', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
