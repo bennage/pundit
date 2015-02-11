@@ -1,54 +1,20 @@
 import { expect } from 'chai';
 import { Store } from '../server/Store';
+import { DocumentClient } from './mocks/DocumentClient';
 
-// we use Q instead of `Promise` because that's what the
-// DocumentDB client uses.
-var Q = require('q');
-
-class DocumentClientStub {
-
-    constructor() {
-        this.query = '';
-        this.databases = [];
-        this.collections = [];
-    }
-
-    queryDatabases(query) {
-        var feed = this.databases;
-        this.query = query;
-
-        return {
-            executeNextAsync: () => {
-                return Q( { feed: feed });
-            }
-        }
-    }
-
-    queryCollections(dbLink, query) {
-        var feed = this.collections;
-        this.query = query;
-
-        return {
-            executeNextAsync: () => {
-                return Q( { feed: feed });
-            }
-        }
-    }
-}
-
-describe('A repository', () => {
+describe('The document store', () => {
 
     describe('when checking the existence of a database', ()=> {
 
-        const database_id = 'owner1/repo1';
+        const database_id = 'owner1/store1';
 
         it('constructs the expected query', done => {
-            var client = new DocumentClientStub();
-            var repo = new Store(client);
+            var client = new DocumentClient();
+            var store = new Store(client);
 
             const expected = `SELECT * FROM x WHERE x.id = '${database_id}'`;
 
-            repo.databaseExists(database_id)
+            store.databaseExists(database_id)
                 .then(response => {
                     expect(client.query).to.equal(expected);
                     done();
@@ -60,12 +26,12 @@ describe('A repository', () => {
 
         describe('if the database does not exist', () => {
 
-            var client = new DocumentClientStub();
+            var client = new DocumentClient();
 
             it('sets `exists` to false', done => {
-                var repo = new Store(client);
+                var store = new Store(client);
 
-                repo.databaseExists(database_id)
+                store.databaseExists(database_id)
                     .then(response => {
                         expect(response.exists).to.be.false();
                         done();
@@ -76,9 +42,9 @@ describe('A repository', () => {
             });
 
             it('sets `database` to undefined', done => {
-                var repo = new Store(client);
+                var store = new Store(client);
 
-                repo.databaseExists(database_id)
+                store.databaseExists(database_id)
                     .then(response => {
                         expect(response.database).to.be.undefined();
                         done();
@@ -92,15 +58,15 @@ describe('A repository', () => {
 
         describe('if the database does exist', () => {
 
-            var client = new DocumentClientStub();
+            var client = new DocumentClient();
             client.databases.push(
                 { /* a database */ }
             );
 
             it('sets `exists` to true', done => {
-                var repo = new Store(client);
+                var store = new Store(client);
 
-                repo.databaseExists(database_id)
+                store.databaseExists(database_id)
                     .then(response => {
                         expect(response.exists).to.be.true();
                         done();
@@ -111,9 +77,9 @@ describe('A repository', () => {
             });
 
             it('sets `database` to defined', done => {
-                var repo = new Store(client);
+                var store = new Store(client);
 
-                repo.databaseExists(database_id)
+                store.databaseExists(database_id)
                     .then(response => {
                         expect(response.database).to.not.be.undefined();
                         done();
@@ -128,17 +94,19 @@ describe('A repository', () => {
 
     describe('when checking the existence of a collection', ()=> {
 
+        const databaseLink = '/dbs0123';
         const collection_id = 'blob_sha';
 
         it('constructs the expected query', done => {
-            var client = new DocumentClientStub();
-            var repo = new Store(client);
+            var client = new DocumentClient();
+            var store = new Store(client);
 
             const expected = `SELECT * FROM x WHERE x.id = '${collection_id}'`;
 
-            repo.collectionExists(null, collection_id)
+            store.collectionExists(databaseLink, collection_id)
                 .then(response => {
                     expect(client.query).to.equal(expected);
+                    expect(client.databaseLink).to.equal(databaseLink);
                     done();
                 })
                 .catch(err =>{
@@ -148,12 +116,12 @@ describe('A repository', () => {
 
         describe('if the collection does not exist', () => {
 
-            var client = new DocumentClientStub();
+            var client = new DocumentClient();
 
             it('sets `exists` to false', done => {
-                var repo = new Store(client);
+                var store = new Store(client);
 
-                repo.databaseExists(collection_id)
+                store.databaseExists(collection_id)
                     .then(response => {
                         expect(response.exists).to.be.false();
                         done();
@@ -164,9 +132,9 @@ describe('A repository', () => {
             });
 
             it('sets `collection` to undefined', done => {
-                var repo = new Store(client);
+                var store = new Store(client);
 
-                repo.databaseExists(collection_id)
+                store.databaseExists(collection_id)
                     .then(response => {
                         expect(response.collection).to.be.undefined();
                         done();
@@ -180,15 +148,15 @@ describe('A repository', () => {
 
         describe('if the collection does exist', () => {
 
-            var client = new DocumentClientStub();
+            var client = new DocumentClient();
             client.collections.push(
                 { /* a collection */ }
             );
 
             it('sets `exists` to true', done => {
-                var repo = new Store(client);
+                var store = new Store(client);
 
-                repo.collectionExists(collection_id)
+                store.collectionExists(collection_id)
                     .then(response => {
                         expect(response.exists).to.be.true();
                         done();
@@ -199,9 +167,9 @@ describe('A repository', () => {
             });
 
             it('sets `collection` to defined', done => {
-                var repo = new Store(client);
+                var store = new Store(client);
 
-                repo.collectionExists(collection_id)
+                store.collectionExists(collection_id)
                     .then(response => {
                         expect(response.collection).to.not.be.undefined();
                         done();
@@ -214,6 +182,26 @@ describe('A repository', () => {
         });
     });
 
+    describe('when creating a collection', () => {
+
+        const databaseLink = '/dbs0123';
+
+        it('the client receives the expected request', done => {
+            var client = new DocumentClient();
+            var store = new Store(client);
+
+            store.createCollection(databaseLink, 'blob_sha')
+                .then(response => {
+                    expect(client.collectionId).to.equal('blob_sha');
+                    expect(client.databaseLink).to.equal(databaseLink);
+                    done();
+                })
+                .catch(err => {
+                    done(err);
+                });
+        });
+    });
+
     describe('when persisting a comment', done => {
 
         const blobSha = 'something';
@@ -221,10 +209,10 @@ describe('A repository', () => {
 
         it('acknowledges success', done => {
 
-            var client = new DocumentClientStub();
-            var repo = new Store(client);
+            var client = new DocumentClient();
+            var store = new Store(client);
 
-            repo
+            store
                 .persistComment(blobSha, comment)
                 .then(response => {
                     expect(response).to.be.true();

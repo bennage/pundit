@@ -37,7 +37,8 @@ export class Store {
     }
 
     createCollection(databaseLink, id) {
-
+        return this.client
+            .createCollectionAsync(databaseLink, { id: id })  ;
     }
 
     persistComment (blobSha, comment) {
