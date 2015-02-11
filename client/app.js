@@ -1,13 +1,16 @@
 import { Router } from 'aurelia-router';
 import { EventAggregator } from 'aurelia-event-aggregator';
+import { HttpClient } from 'aurelia-http-client';
 
 export class App {
 
-	static inject() { return [Router, EventAggregator]; }
+	static inject() { return [Router, EventAggregator, HttpClient]; }
 
-	constructor(router, events) {
+	constructor(router, events, http) {
 		this.router = router;
 		this.events = events;
+		this.http = http;
+		this.user = {};
 
 		this.router.configure(config => {
 
@@ -32,5 +35,16 @@ export class App {
 				alert('You are out of APIs!');
 			}
 		});
+	}
+
+	activate () {
+		var self = this;
+		this.http
+			.get('/user')
+			.then(response => {
+				var user = response.content;
+				self.user = user;
+				console.dir(user);
+			});
 	}
 }
