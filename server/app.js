@@ -31,6 +31,12 @@ if (app.get('env') == 'development') {
     var browserSync = require('browser-sync');
     var bs = browserSync.init([], {});
     app.use(require('connect-browser-sync')(bs));
+
+    // for debugging the source client js
+    app.use('/client/:file', function(req, res, next) {
+        res.sendFile(path.join(__dirname, '../client/', req.params.file));
+    });
+
 }
 
 app.use(express.static(path.join(__dirname, 'public')));
