@@ -7,6 +7,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var paths = require('../paths');
 var compilerOptions = require('../6to5-options');
 var assign = Object.assign || require('object.assign');
+var minifyHTML = require('gulp-minify-html');
 
 gulp.task('build-system', function () {
   return gulp.src(paths.source)
@@ -19,9 +20,12 @@ gulp.task('build-system', function () {
 });
 
 gulp.task('build-html', function () {
-  return gulp.src(paths.html)
-    .pipe(changed(paths.output, {extension: '.html'}))
-    .pipe(gulp.dest(paths.output));
+    var opts = {comments:true,spare:true};
+
+    return gulp.src(paths.html)
+        .pipe(changed(paths.output, {extension: '.html'}))
+        .pipe(minifyHTML(opts))
+        .pipe(gulp.dest(paths.output));
 });
 
 gulp.task('build', function(callback) {
