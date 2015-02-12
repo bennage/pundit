@@ -1,9 +1,8 @@
 export class Line {
 
-    constructor(text, number, user) {
+    constructor(text, number, createCommentWithContext) {
         this.text = (text === '') ? ' ' : text;
         this.number = number;
-        this.user = user;
 
         this.comments = [];
 
@@ -11,7 +10,7 @@ export class Line {
         this.adding = false;
 
         this.newCommentBody = '';
-
+        this.createCommentWithContext = createCommentWithContext;
     }
 
     addComment() {
@@ -25,10 +24,13 @@ export class Line {
     postComment() {
         this.adding = false;
 
-        this.comments.push({
-            author: this.user.name,
-            body: this.newCommentBody
-        });
+        var comment = this.createCommentWithContext();
+
+        console.dir(comment);
+        
+        comment.body = this.newCommentBody;
+
+        this.comments.push(comment);
 
         this.newCommentBody = '';
     }
