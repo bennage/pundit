@@ -8,7 +8,6 @@ nav
 
 .repository
 	display table
-	width 100%
 
 	.tree
 		vertical-align top
@@ -33,6 +32,19 @@ nav
 		padding-left 0
 
 	.document
-		display table-cell
-		width 90%
+		display table
 		vertical-align top
+
+		article
+			display table-cell
+			tr:hover
+				background-color #eee
+			td
+				font-family Consolas, "Liberation Mono", Menlo, Courier, monospace
+				word-wrap break-word
+				white-space pre-wrap
+				padding-left 18px
+				text-indent -7px
+
+		aside
+			display table-cell

@@ -1,8 +1,19 @@
 <template>
 
-    <div>${path}</div>
+    <article>
+        <div>${path}</div>
 
-    <code>${sha}</code>
-    <pre>${content}</pre>
+        <code>${sha}</code>
+
+        <table>
+            <tr repeat.for="line of content">
+                <td click.trigger="select()">${line}</td>
+            </tr>
+        </table>
+    </article>
+
+    <aside>
+        <input type="text" value="" />
+    </aside>
 
 </template>

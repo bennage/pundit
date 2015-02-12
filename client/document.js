@@ -8,7 +8,7 @@ export class Document{
         this.github = github;
         this.sha = '';
         this.path = '';
-        this.content = '';
+        this.content = [];
     }
 
     activate(route){
@@ -21,7 +21,17 @@ export class Document{
         return this.github.
             fetchRawFile(route.$parent.owner, route.$parent.repo, route.sha, route.path).
             then(function(content){
-                self.content = content;
+                debugger;
+                self.content = content.split('\n')
+                    .map(line => {
+                        return line === ''
+                            ? ' '
+                            : line;
+                    });
             });
+    }
+
+    select(line) {
+        console.log(line);
     }
 }
