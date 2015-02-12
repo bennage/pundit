@@ -27,7 +27,9 @@ everyauth.github
     .appSecret(clientSecret)
     .findOrCreateUser( (session, accessToken, accessTokenExtra, githubUserMetadata) => {
         session['user'] = githubUserMetadata;
-        return githubUserMetadata;
+        session['user']['accessToken'] = accessToken;
+        session['user']['accessTokenExtra'] = accessTokenExtra;
+        return session['user'];
     })
     .redirectPath('/');
 

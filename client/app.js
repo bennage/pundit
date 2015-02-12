@@ -1,16 +1,17 @@
 import { Router } from 'aurelia-router';
 import { EventAggregator } from 'aurelia-event-aggregator';
 import { HttpClient } from 'aurelia-http-client';
+import user from './user';
 
 export class App {
 
-	static inject() { return [Router, EventAggregator, HttpClient]; }
+	static inject() { return [Router, EventAggregator, HttpClient, ()=> { return user; }]; }
 
-	constructor(router, events, http) {
+	constructor(router, events, http, user) {
 		this.router = router;
 		this.events = events;
 		this.http = http;
-		this.user = {};
+		this.user = user;
 
 		this.router.configure(config => {
 
@@ -42,8 +43,7 @@ export class App {
 		this.http
 			.get('/user')
 			.then(response => {
-				var user = response.content;
-				self.user = user;
+				Object.assign(self.user, response.content);
 			});
 	}
 }

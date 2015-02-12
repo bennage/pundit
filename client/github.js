@@ -2,11 +2,14 @@ import { EventAggregator } from 'aurelia-event-aggregator';
 import { Headers } from 'aurelia-http-client';
 import { HttpClient } from 'aurelia-http-client';
 import { Node } from './Node';
+import user from './user';
 
 function configuredHttpClient() {
 	var base_url = 'https://api.github.com/';
 	var headers = new Headers();
-	headers.add('Accept', 'application/vnd.github.v3+json')
+	headers.add('Accept', 'application/vnd.github.v3+json');
+	headers.add('Authorization', `token ${user.accessToken}`);
+
 	return new HttpClient(base_url, headers);
 }
 
