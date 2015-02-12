@@ -1,12 +1,14 @@
 import {GitHub} from './github';
 import {Line} from './Line';
+import user from './user';
 
 export class Document{
 
-    static inject() { return [GitHub]; }
+    static inject() { return [GitHub, ()=> { return user; } ]; }
 
-    constructor(github) {
+    constructor(github, user) {
         this.github = github;
+        this.user = user;
         this.sha = '';
         this.path = '';
         this.lines = [];
@@ -26,7 +28,7 @@ export class Document{
 
                 self.lines = content
                     .split('\n')
-                    .map( (text, index) => { return new Line(text, index); });
+                    .map( (text, index) => { return new Line(text, index, self.user); });
             });
     }
 

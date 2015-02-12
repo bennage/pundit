@@ -1,8 +1,9 @@
 export class Line {
 
-    constructor(text, number) {
+    constructor(text, number, user) {
         this.text = (text === '') ? ' ' : text;
         this.number = number;
+        this.user = user;
 
         this.comments = [];
 
@@ -23,7 +24,12 @@ export class Line {
 
     postComment() {
         this.adding = false;
-        console.log(this.newCommentBody);
+
+        this.comments.push({
+            author: this.user.name,
+            body: this.newCommentBody
+        });
+
         this.newCommentBody = '';
     }
 }
