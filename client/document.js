@@ -1,4 +1,5 @@
 import {GitHub} from './github';
+import {Line} from './Line';
 
 export class Document{
 
@@ -8,10 +9,11 @@ export class Document{
         this.github = github;
         this.sha = '';
         this.path = '';
-        this.content = [];
+        this.lines = [];
+        this.selectedLine = null;
     }
 
-    activate(route){
+    activate(route) {
 
         var self = this;
 
@@ -21,17 +23,14 @@ export class Document{
         return this.github.
             fetchRawFile(route.$parent.owner, route.$parent.repo, route.sha, route.path).
             then(function(content){
-                debugger;
-                self.content = content.split('\n')
-                    .map(line => {
-                        return line === ''
-                            ? ' '
-                            : line;
-                    });
+
+                self.lines = content
+                    .split('\n')
+                    .map( (text, index) => { return new Line(text, index); });
             });
     }
 
-    select(line) {
-        console.log(line);
+    postComment() {
+
     }
 }

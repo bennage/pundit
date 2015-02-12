@@ -1,19 +1,36 @@
 <template>
 
-    <article>
-        <div>${path}</div>
-
-        <code>${sha}</code>
-
-        <table>
-            <tr repeat.for="line of content">
-                <td click.trigger="select()">${line}</td>
+    <div>${path}</div>
+    <table>
+        <template repeat.for="line of lines">
+            <tr class="line ${line.selected ? 'active' : ''}">
+                <td class="number">
+                    ${line.number}
+                    <i class="add-comment fa fa-plus-square"
+                        click.trigger="line.addComment()"></i>
+                </td>
+                <td class="text" colspan="2">${line.text}</td>
             </tr>
-        </table>
-    </article>
-
-    <aside>
-        <input type="text" value="" />
-    </aside>
+            <tr repeat.for="comment of line.comments"
+                class="comment">
+                <td>&nbsp;</td>
+                <td>${comment.author}</td>
+                <td>
+                    <div>${comment.body}</div>
+                </td>
+            </tr>
+            <tr if.bind="line.adding">
+                <td colspan="3">
+                    <textarea value.bind="line.newCommentBody"/>
+                    <button
+                        class="btn"
+                        click.trigger="line.cancelComment()">Cancel</button>
+                    <button
+                        class="btn btn-success"
+                        click.trigger="line.postComment()">Comment</button>
+                </td>
+            </tr>
+        </template>
+    </table>
 
 </template>
