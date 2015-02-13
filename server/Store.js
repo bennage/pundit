@@ -1,7 +1,37 @@
+import Q from 'q';
+
 export class Store {
 
-    constructor (documentClient) {
+    constructor (documentClient, databaseName) {
         this.client = documentClient;
+        this.databaseName = databaseName;
+        this.database = null;
+    }
+
+    initialize () {
+
+        var self = this;
+        var databaseName = this.databaseName;
+
+        this.databaseExists(databaseName)
+            .then(response => {
+                return response.exists
+                    ? Q(response.database)
+                    : self.createDatabase(databaseName);
+            })
+            .then(response => {
+                console.log('@@@@@@@@@@');
+                console.dir(response.resource);
+                self.database = response.resource;
+                return Q(response.resource);
+            })
+            .then(database => {
+                console.dir(database);
+                return collectionExists(database._self, 'comments')
+                    .then(response => {
+                        console.dir(response);
+                    });
+            });
     }
 
     databaseExists(id) {
@@ -18,6 +48,11 @@ export class Store {
                     database: found ? response.feed[0] : undefined
                 };
             });
+    }
+
+    createDatabase(databaseName) {
+        return this.client
+            .createDatabaseAsync({ id: databaseName })  ;
     }
 
     collectionExists(databaseLink, id) {

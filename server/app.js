@@ -15,6 +15,8 @@ var routes = require('./routes/index'),
     comments = require('./routes/comments')
     users = require('./routes/users');
 
+var store = require('./configuredStore');
+
 var app = express();
 
 // NOTE: We're not using a view engine, but Express complains if these are missing
@@ -78,5 +80,6 @@ app.use(function(err, req, res, next) {
     });
 });
 
+store.initialize();
 
 module.exports = app;
