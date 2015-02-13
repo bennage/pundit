@@ -1,19 +1,20 @@
 import {GitHub} from './github';
+import {Store} from './store';
 import {Line} from './Line';
 import context from './context';
 
 export class Document{
 
-    static inject() { return [GitHub, ()=> { return context; } ]; }
+    static inject() { return [GitHub, Store, ()=> { return context; } ]; }
 
-    constructor(github, context) {
+    constructor(github, store, context) {
         this.github = github;
+        this.store = store;
         this.context = context;
         this.sha = '';
         this.repo = '';
         this.path = '';
         this.lines = [];
-        this.selectedLine = null;
     }
 
     activate(route) {
@@ -24,14 +25,31 @@ export class Document{
         this.path = route.path;
         this.repo = `${route.$parent.owner}/${route.$parent.repo}`;
 
-        return this.github.
-            fetchRawFile(route.$parent.owner, route.$parent.repo, route.sha, route.path).
-            then(content => {
+        return this.github
+            .fetchRawFile(route.$parent.owner, route.$parent.repo, route.sha, route.path)
+            .then(this.transformRawFileIntoViewModel.bind(this))
+            .then( () => {
+                // TODO: this could execute in parallel
+                // what is the es6 equivalent of WhenAll?
+                return self.store
+                    .getComments(route.$parent.owner, route.$parent.repo, route.sha);
+            })
+            .then(this.associateCommentsWithLines.bind(this));
+    }
 
-                self.lines = content
-                    .split('\n')
-                    .map( (text, index) => { return new Line(text, index); });
-            });
+    transformRawFileIntoViewModel(rawFile) {
+        this.lines = rawFile
+            .split('\n')
+            .map( (text, index) => { return new Line(text, index); });
+    }
+
+    associateCommentsWithLines(comments){
+
+        var self = this;
+        comments.forEach(comment => {
+            var line = self.lines[comment.lineNumber];
+            line.comments.push(comment);
+        });
     }
 
     postComment(line) {
@@ -56,5 +74,7 @@ export class Document{
         line.comments.push(comment);
 
         line.newCommentBody = '';
+
+        return this.store.postComment(comment);
     }
 }
