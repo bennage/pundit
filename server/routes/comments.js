@@ -7,7 +7,7 @@ var router = express.Router();
 
 router.post('/new', (req, res) => {
 
-    logger.info(req.url, req.body);
+    logger.info(req.url);
 
     store
         .persistComment(req.body)
@@ -20,30 +20,17 @@ router.post('/new', (req, res) => {
 
 router.get('/:owner/:repo/:blobSha', (req, res) => {
 
-    var makeFake = (lineNumber) => {
-        return {
-            author: {
-                login: 'bennage',
-                name: 'Christopher Bennage',
-                avatar_url: 'https://avatars.githubusercontent.com/u/118161?v=3',
-                email: 'christopher@bennage.com'
-            },
-            repo: 'mspnp/data-pipeline',
-            blobSha: req.params.blobSha,
-            body: 'hello world',
-            lineNumber: lineNumber,
-            timestamp: new Date()
-        }
-    }
+    logger.info(req.url);
 
-    //TODO: query the docdb store
-    var comments = [
-        makeFake(1),
-        makeFake(5),
-        makeFake(5)
-    ];
+    var p = req.params;
 
-    res.json(comments);
+    store
+        .getComments(p.owner, p.repo, p.blobSha)
+        .then(comments => {
+            res.json(comments);
+        })
+        .catch(logger.error);
+
 });
 
 export default router;

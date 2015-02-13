@@ -39,9 +39,7 @@ export class Store {
                         return Q(collection);
                     });
             })
-            .catch(error => {
-                logger.error(error);
-            });
+            .catch(logger.error);
     }
 
     databaseExists(id) {
@@ -101,7 +99,27 @@ export class Store {
     }
 
     persistComment (comment) {
+        logger.info('persistComment', comment);
+
+        const collectionLink = this.collection._self;
+        const opts = { disableAutomaticIdGeneration:false };
+
         return this.client
-            .createDocument(this.collection._self, comment) ;
+            .createDocumentAsync(collectionLink, comment, opts);
+    }
+
+    getComments (owner, repo, blobSha) {
+        const qualified_repo = `${owner}/${repo}`;
+        const query = `SELECT * FROM x WHERE x.repo = '${qualified_repo}' AND x.blobSha = '${blobSha}'`;
+
+        logger.info('getComments', query);
+
+        return this.client
+            .queryDocuments(this.collection._self, query)
+            .executeNextAsync()
+            .then(response => {
+                logger.info('getComments', response);
+                return response.feed;
+            });
     }
 }
