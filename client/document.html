@@ -9,29 +9,51 @@
                     <i class="add-comment fa fa-plus-square"
                         click.trigger="line.addComment()"></i>
                 </td>
-                <td class="text" colspan="2">${line.text}</td>
+                <td class="text">${line.text}</td>
             </tr>
-            <tr repeat.for="comment of line.comments"
-                class="comment">
-                <td>&nbsp;</td>
-                <td>${comment.author.login}</td>
-                <td>
-                    <div>${comment.body}</div>
+            <tr repeat.for="comment of line.comments">
+                <td colspan="2">
+                    <div class="comment">
+                        <div class="meta">
+                            <img
+                                title.bind="comment.author.login"
+                                src.bind="comment.author.avatar_url" />
+                            <span class="name">${comment.author.name}</span>
+                            <span> commented&nbsp;</span>
+                            <time datetime.bind="comment.timestamp">${comment.timestamp}</time>
+                        </div>
+                        <div class="body">${comment.body}</div>
+                    </div>
+                </td>
+            </tr>
+            <tr if.bind="!line.adding && line.comments.length > 0">
+                <td colspan="2">
+                    <div class="show-form pull-right">
+                        <button
+                            class="btn btn-success"
+                            click.trigger="line.addComment()">Add comment</button>
+                    </div>
                 </td>
             </tr>
             <tr if.bind="line.adding">
-                <td colspan="3">
-                    <textarea value.bind="line.newCommentBody"/>
-                    <!--
-                    TODO: Can we avoid binding this to the model
-                          and just pass it into `postComment`?
-                    -->
-                    <button
-                        class="btn"
-                        click.trigger="line.cancelComment()">Cancel</button>
-                    <button
-                        class="btn btn-success"
-                        click.trigger="$parent.postComment(line)">Comment</button>
+                <td colspan="2">
+                    <form class="comment">
+                        <textarea
+                            value.bind="line.newCommentBody"
+                            placeholder="Share your thoughts."></textarea>
+                        <!--
+                        TODO: Can we avoid binding this to the model
+                              and just pass it into `postComment`?
+                        -->
+                        <div class="commands pull-right">
+                            <button
+                                class="btn"
+                                click.trigger="line.cancelComment()">Cancel</button>
+                            <button
+                                class="btn btn-success"
+                                click.trigger="$parent.postComment(line)">Comment</button>
+                        </div>
+                    </form>
                 </td>
             </tr>
         </template>

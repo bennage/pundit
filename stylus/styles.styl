@@ -34,46 +34,67 @@ nav
 	.document
 		display table
 		vertical-align top
-
 		table
-			div
-				margin 0
-				padding 0
-			tr
-				.add-comment
-					display none
-					position absolute
-					font-size 120%
-					top 0
-					right 0
-					color rgb(92, 184, 92)
+			border-radius 2px
+			border 1px solid rgb(216, 216, 216)
+		.comment
+			border-radius 2px
+			border 1px solid rgb(216, 216, 216)
+			margin 0.5em
+			.meta
+				color rgb(153, 153, 153)
+				background-color rgb(247, 247, 247)
+				padding 0.5em
+				border-radius 2px 2px 0 0
+				img
+					border-radius 2px
+					width 20px
+					height 20px
+					margin-right 4px
+				.name
+					font-weight bold
+					color rgb(85, 85, 85)
+			.body
+				padding 0.5em 0.5em 0.5em 1em
+			textarea
+				display block
+				border none
+				width 100%
+				min-height 100px
+				max-height 500px
+				padding 10px
+				resize vertical
+			.commands
+				margin-top 0.5em
+		.show-form
+			margin 0 0.5em
+		tr.line
+			.add-comment
+				display none
+				position absolute
+				font-size 120%
+				top 0
+				right 0
+				color rgb(92, 184, 92)
 
-				&:hover
-					background-color #eee
-					.add-comment
-						display block
-				&.active
-					background-color yellow
+			&:hover
+				background-color #eee
+				.add-comment
+					display block
 			td
 				font-family Consolas, "Liberation Mono", Menlo, Courier, monospace
 				word-wrap break-word
 				white-space pre-wrap
-				// padding-left 18px
-				// text-indent -7px
+				vertical-align top
 				&.text
-					vertical-align top
+					padding-left 0.5em
 				&.number
-					vertical-align top
+					border 1px solid rgb(216, 216, 216)
+					border-top none
+					border-bottom none
+					font-size 12px
 					text-align right
 					padding-right 0.5em
-					color #999
+					padding-left 1em
+					color rgb(153, 153, 153)
 					position relative
-				ol
-					display none
-					margin 0
-					padding 0
-					list-style-type none
-
-					li
-						margin 0
-						padding 0
