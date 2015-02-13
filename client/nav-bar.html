@@ -16,9 +16,12 @@
             </li>
           </ul>
 
-          <div class="user">
-              <span>${user.name}</span>
+          <div class="user navbar-right">
               <img src="${user.avatar_url}" title="${user.name}" />
+              <div class="pull-right">
+                  <div>${user.name}</div>
+                  <a href="#">Sign out</a>
+              </div>
           </div>
 
           <ul class="nav navbar-nav navbar-right">
