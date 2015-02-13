@@ -5,7 +5,7 @@
         <template repeat.for="line of lines">
             <tr class="line ${line.selected ? 'active' : ''}">
                 <td class="number">
-                    ${line.number}
+                    <span>${line.number}</span>
                     <i class="add-comment fa fa-plus-square"
                         click.trigger="line.addComment()"></i>
                 </td>
