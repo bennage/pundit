@@ -1,16 +1,15 @@
 export class Line {
 
-    constructor(text, number, createCommentWithContext) {
+    constructor(text, number) {
         this.text = (text === '') ? ' ' : text;
         this.number = number;
 
         this.comments = [];
 
-        this.selected = false;
         this.adding = false;
 
+        // See the TODO about this in the view.
         this.newCommentBody = '';
-        this.createCommentWithContext = createCommentWithContext;
     }
 
     addComment() {
@@ -19,19 +18,5 @@ export class Line {
 
     cancelComment() {
         this.adding = false;
-    }
-
-    postComment() {
-        this.adding = false;
-
-        var comment = this.createCommentWithContext();
-
-        console.dir(comment);
-        
-        comment.body = this.newCommentBody;
-
-        this.comments.push(comment);
-
-        this.newCommentBody = '';
     }
 }

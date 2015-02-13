@@ -14,7 +14,7 @@
             <tr repeat.for="comment of line.comments"
                 class="comment">
                 <td>&nbsp;</td>
-                <td>${comment.author}</td>
+                <td>${comment.author.login}</td>
                 <td>
                     <div>${comment.body}</div>
                 </td>
@@ -22,12 +22,16 @@
             <tr if.bind="line.adding">
                 <td colspan="3">
                     <textarea value.bind="line.newCommentBody"/>
+                    <!--
+                    TODO: Can we avoid binding this to the model
+                          and just pass it into `postComment`?
+                    -->
                     <button
                         class="btn"
                         click.trigger="line.cancelComment()">Cancel</button>
                     <button
                         class="btn btn-success"
-                        click.trigger="line.postComment()">Comment</button>
+                        click.trigger="$parent.postComment(line)">Comment</button>
                 </td>
             </tr>
         </template>

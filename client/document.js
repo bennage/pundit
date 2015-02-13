@@ -26,26 +26,35 @@ export class Document{
 
         return this.github.
             fetchRawFile(route.$parent.owner, route.$parent.repo, route.sha, route.path).
-            then(function(content){
-
-                var createCommentWithContext = self.createCommentWithContext.bind(self);
+            then(content => {
 
                 self.lines = content
                     .split('\n')
-                    .map( (text, index) => { return new Line(text, index, createCommentWithContext); });
+                    .map( (text, index) => { return new Line(text, index); });
             });
     }
 
-    createCommentWithContext() {
-        return {
-            author: this.context.user.name,
+    postComment(line) {
+        line.adding = false;
+
+        var user = this.context.user;
+
+        var comment = {
+            author: {
+                login: user.login,
+                name: user.name,
+                avatar_url: user.avatar_url,
+                email: user.email
+            },
             repo: this.repo,
-            blobSha: this.sha
+            blobSha: this.sha,
+            body: line.newCommentBody,
+            lineNumber: line.number,
+            timestamp: new Date()
         };
-    }
 
+        line.comments.push(comment);
 
-    postComment() {
-
+        line.newCommentBody = '';
     }
 }
