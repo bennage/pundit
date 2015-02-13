@@ -100,8 +100,8 @@ export class Store {
             .createCollectionAsync(databaseLink, { id: id })  ;
     }
 
-    persistComment (blobSha, comment) {
-
-        return new Promise(resolve => { resolve(true); });
+    persistComment (comment) {
+        return this.client
+            .createDocument(this.collection._self, comment) ;
     }
 }
