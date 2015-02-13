@@ -32,10 +32,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 if (app.get('env') == 'development') {
-    logger.info('starting browser-sync');
-    var browserSync = require('browser-sync');
-    var bs = browserSync.init([], {});
-    app.use(require('connect-browser-sync')(bs));
 
     // for debugging the source client js
     app.use('/client/:file', function(req, res, next) {
