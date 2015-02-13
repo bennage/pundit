@@ -1,4 +1,4 @@
-import logger from './logger';
+import logger from 'winston';
 import everyauth from 'everyauth';
 
 const clientId = process.env.GITHUB_CLIENT_ID;
@@ -12,8 +12,8 @@ if(!clientSecret) {
     throw 'process.env.GITHUB_CLIENT_SECRET is not defined';
 }
 
-logger.log(`GITHUB_CLIENT_ID : ${clientId}`);
-logger.log(`GITHUB_CLIENT_SECRET : ${clientSecret}`);
+logger.info(`GITHUB_CLIENT_ID : ${clientId}`);
+logger.info(`GITHUB_CLIENT_SECRET : ${clientSecret}`);
 
 everyauth.everymodule
     .findUserById( (req, userId, callback) => {

@@ -60,7 +60,8 @@
     "express-session": "^1.10.2",
     "morgan": "~1.5.1",
     "q": "^1.1.2",
-    "serve-favicon": "~2.2.0"
+    "serve-favicon": "~2.2.0",
+    "winston": "^0.9.0"
   },
   "scripts": {
     "test": "node_modules/.bin/mocha ./server.specs/**.spec.js --compilers js:6to5/register --growl --watch",

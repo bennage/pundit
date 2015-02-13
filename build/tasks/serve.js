@@ -6,7 +6,8 @@ var paths = require('../paths');
 gulp.task('serve', ['build'], function () {
 
     browserSync.init(null, {
-        proxy: "http://localhost:3000",
+        open: false,
+        proxy: 'http://localhost:3000',
         port: 9000
     });
 
@@ -25,7 +26,7 @@ gulp.task('serve', ['build'], function () {
 
     // restart the server itself when backend code changes
     gulp.watch(
-        ['server/app.js', 'server/routes/**/*.js'],
+        ['server/*.js', 'server/routes/**/*.js'],
         function() {server.run({ file:serverFile }); }
         );
 });

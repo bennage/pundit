@@ -8,7 +8,8 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     session = require('express-session');
 
-var logger = require('./logger');
+var logger = require('winston');
+
 var auth = require('./auth');
 
 var routes = require('./routes/index'),
@@ -19,7 +20,8 @@ var store = require('./configuredStore');
 
 var app = express();
 
-// NOTE: We're not using a view engine, but Express complains if these are missing
+// We're not using a view engine, but
+// Express complains if these are missing
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
@@ -30,7 +32,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 if (app.get('env') == 'development') {
-    logger.log('starting browser-sync');
+    logger.info('starting browser-sync');
     var browserSync = require('browser-sync');
     var bs = browserSync.init([], {});
     app.use(require('connect-browser-sync')(bs));
@@ -80,6 +82,9 @@ app.use(function(err, req, res, next) {
     });
 });
 
+// initializing the store might take
+// some time, though practically not
+// more than a few seconds
 store.initialize();
 
 module.exports = app;
