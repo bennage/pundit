@@ -20,8 +20,8 @@ gulp.task('serve', ['build'], function () {
 
     // rebuild the client source when files change
     gulp.watch(['client/**/*.html'], ['build-html', browserSync.reload]);
-    gulp.watch(['client/**/*.js'], ['build-system']);
-    gulp.watch(['stylus/**/*.styl'], ['stylus']);
+    gulp.watch(['client/**/*.js'], ['build-system', browserSync.reload]);
+    gulp.watch(['stylus/**/*.styl'], ['stylus', browserSync.reload]);
     // TODO: add back `browserSync.reload, server.notify` to the above
 
     // restart the server itself when backend code changes
