@@ -1,5 +1,7 @@
 require('6to5/register');
 
+var logger = require('winston');
+
 var express = require('express'),
     path = require('path'),
     favicon = require('serve-favicon'),
@@ -8,30 +10,36 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     session = require('express-session');
 
-var logger = require('winston');
-
-var auth = require('./auth');
-
-var routes = require('./routes/index'),
+var auth = require('./auth'),
+    routes = require('./routes/index'),
     comments = require('./routes/comments')
     users = require('./routes/users');
 
 var store = require('./configuredStore');
 
+// configure express
 var app = express();
 
-// We're not using a view engine, but
-// Express complains if these are missing
+// we're not using a view engine, but
+// express complains if these are missing
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(favicon(__dirname + '/public/favicon.ico'));
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+logger.remove(logger.transports.Console);
+
 if (app.get('env') == 'development') {
+
+    // only log to console in a dev environment
+    logger.add(logger.transports.Console, {
+        colorize: true,
+        prettyPrint: true
+    });
 
     // for debugging the source client js
     app.use('/client/:file', function(req, res, next) {
@@ -81,6 +89,6 @@ app.use(function(err, req, res, next) {
 // initializing the store might take
 // some time, though practically not
 // more than a few seconds
-store.initialize();
+store.initialize('pundit');
 
 module.exports = app;

@@ -1,42 +1,57 @@
+import logger from 'winston';
 import Q from 'q';
 
 export class Store {
 
-    constructor (documentClient, databaseName) {
+    constructor (documentClient) {
         this.client = documentClient;
-        this.databaseName = databaseName;
         this.database = null;
+        this.collection = null;
     }
 
-    initialize () {
+    initialize (databaseName) {
 
         var self = this;
-        var databaseName = this.databaseName;
+        const collectionName = 'comments';
+
+        logger.info(`initialize database ${databaseName}`);
 
         this.databaseExists(databaseName)
             .then(response => {
+                logger.info('databaseExists', response);
                 return response.exists
                     ? Q(response.database)
-                    : self.createDatabase(databaseName);
-            })
-            .then(response => {
-                console.log('@@@@@@@@@@');
-                console.dir(response.resource);
-                self.database = response.resource;
-                return Q(response.resource);
+                    : self.createDatabase(databaseName).bind(self);
             })
             .then(database => {
-                console.dir(database);
-                return collectionExists(database._self, 'comments')
+
+                self.database = database;
+
+                return self.collectionExists(collectionName)
                     .then(response => {
-                        console.dir(response);
+                        logger.info('collectionExists', response);
+                        return response.exists
+                            ? Q(response.collection)
+                            : self.createCollection(collectionName).bind(self);
+                    })
+                    .then(collection => {
+                        self.collection = collection;
+                        return Q(collection);
                     });
+            })
+            .catch(error => {
+                logger.error(error);
             });
     }
 
     databaseExists(id) {
 
         const query = `SELECT * FROM x WHERE x.id = '${id}'`;
+
+        logger.info('databaseExists?', {
+            id: id,
+            query: query
+        });
 
         return this.client
             .queryDatabases(query)
@@ -51,13 +66,19 @@ export class Store {
     }
 
     createDatabase(databaseName) {
+        logger.info('createDatabase', databaseName);
         return this.client
             .createDatabaseAsync({ id: databaseName })  ;
     }
 
-    collectionExists(databaseLink, id) {
-
+    collectionExists(id) {
+        const databaseLink = this.database._self;
         const query = `SELECT * FROM x WHERE x.id = '${id}'`;
+
+        logger.info('collectionExists?', {
+            databaseLink: databaseLink,
+            query: query
+        });
 
         return this.client
             .queryCollections(databaseLink, query)
@@ -71,7 +92,10 @@ export class Store {
             });
     }
 
-    createCollection(databaseLink, id) {
+    createCollection(id) {
+
+        const databaseLink = this.database._self;
+
         return this.client
             .createCollectionAsync(databaseLink, { id: id })  ;
     }

@@ -19,4 +19,4 @@ logger.info(`PUNDIT_DOCDB_KEY : ${masterKey}`);
 
 var client = new DocumentClientWrapper(host, { masterKey: masterKey });
 
-export default new Store(client,'pundit');
+export default new Store(client);
