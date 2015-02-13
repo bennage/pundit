@@ -1,0 +1,72 @@
+.document
+    display table
+    vertical-align top
+    max-width 800px
+    table
+        border-radius 2px
+        border 1px solid rgb(216, 216, 216)
+    .comment
+        border-radius 2px
+        border 1px solid rgb(216, 216, 216)
+        margin 0.5em
+        .meta
+            color rgb(153, 153, 153)
+            background-color rgb(247, 247, 247)
+            padding 0.5em
+            border-radius 2px 2px 0 0
+            img
+                border-radius 2px
+                width 20px
+                height 20px
+                margin-right 4px
+            .name
+                font-weight bold
+                color rgb(85, 85, 85)
+        .body
+            padding 0.5em 0.5em 0.5em 1em
+        textarea
+            display block
+            border none
+            width 100%
+            min-height 100px
+            max-height 500px
+            padding 10px
+            resize vertical
+        .commands
+            margin-top 0.5em
+    .show-form
+        margin 0 0.5em 0.5em 0.5em
+    tr.line
+        .add-comment
+            display none
+            position absolute
+            font-size 120%
+            top 2px
+            right 2px
+            color rgb(92, 184, 92)
+            text-shadow 0px 0px 2px white
+            background-color white
+            border-radius 4px
+
+        &:hover
+            background-color #eee
+            .add-comment
+                display block
+        td
+            font-family Consolas, "Liberation Mono", Menlo, Courier, monospace
+            word-wrap break-word
+            white-space pre-wrap
+            vertical-align top
+            &.text
+                padding-left 0.5em
+            &.number
+                border 1px solid rgb(216, 216, 216)
+                border-top none
+                border-bottom none
+                font-size 12px
+                max-height 20px
+                text-align right
+                padding-right 0.5em
+                padding-left 1em
+                color rgb(153, 153, 153)
+                position relative
