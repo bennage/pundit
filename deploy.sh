@@ -123,10 +123,14 @@ cd "$DEPLOYMENT_TARGET"
 echo configuring jspm
 JSPM_CMD="node_modules/.bin/jspm"
 
+echo "github auth token: $GITHUB_AUTH_TOKEN"
+
 $JSPM_CMD config endpoints.github.remote https://github.jspm.io
 $JSPM_CMD config endpoints.github.auth $GITHUB_AUTH_TOKEN
 $JSPM_CMD config endpoints.github.maxRepoSize 100
 $JSPM_CMD config endpoints.github.handler jspm-github
+
+exitWithMessageOnError "failed: configuring jspm"
 
 echo running: jspm install
 $JSPM_CMD install
