@@ -13,21 +13,22 @@ var vinylPaths = require('vinyl-paths');
 var gulp = require('gulp');
 var stylus = require('gulp-stylus');
 
-gulp.task('stylus', function () {
-    gulp.src('./stylus/styles.styl')
-        .pipe(stylus())
-        .pipe(gulp.dest('./server/public/styles'));
-});
+paths ={ root: '../client/',
+  source: '../client/**/*.js',
+  html: '../client/**/*.html',
+  style: '../styles/**/*.css',
+  output: '../server/public/' }
 
-gulp.task('clean', function() {
-  return gulp.src([paths.output])
-    .pipe(vinylPaths(del));
+gulp.task('stylus', function () {
+    gulp.src('../stylus/styles.styl')
+        .pipe(stylus())
+        .pipe(gulp.dest('../server/public/styles'));
 });
 
 gulp.task('build-system', function () {
   return gulp.src(paths.source)
     .pipe(plumber())
-    .pipe(changed(paths.output, {extension: '.js'}))
+    .pipe(changed('../server/public/', {extension: '.js'}))
     .pipe(sourcemaps.init())
     .pipe(to5(assign({}, compilerOptions, {modules:'system'})))
     .pipe(sourcemaps.write({includeContent: false, sourceRoot: '/' + paths.root }))
@@ -43,10 +44,6 @@ gulp.task('build-html', function () {
         .pipe(gulp.dest(paths.output));
 });
 
-gulp.task('build', function(callback) {
-  return runSequence(
-    'clean',
-    ['build-system', 'build-html', 'stylus'],
-    callback
-  );
+gulp.task('default', function() {
+  return runSequence(['build-system', 'build-html', 'stylus']);
 });
