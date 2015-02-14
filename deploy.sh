@@ -121,9 +121,11 @@ fi
 cd "$DEPLOYMENT_TARGET"
 
 node_modules/.bin/jspm install
-node_modules/.bin/gulp --gulpfile build/production-build.js build
+exitWithMessageOnError "failed: `jspm install`"
 
-exitWithMessageOnError "local build failed"
+node_modules/.bin/gulp --gulpfile build/production-build.js
+exitWithMessageOnError "failed: `gulp --gulpfile build/production-build.js`"
+
 cd - > /dev/null
 
 ##################################################################################################################################
