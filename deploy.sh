@@ -120,11 +120,21 @@ fi
 # 4. More stuff
 cd "$DEPLOYMENT_TARGET"
 
-node_modules/.bin/jspm install
-exitWithMessageOnError "failed: `jspm install`"
+echo configuring jspm
+JSPM_CMD = node_modules/.bin/jspm
 
+$JSPM_CMD config endpoints.github.remote https://github.jspm.io
+$JSPM_CMD config endpoints.github.auth $GITHUB_AUTH_TOKEN
+$JSPM_CMD config endpoints.github.maxRepoSize 100
+$JSPM_CMD config endpoints.github.handler jspm-github
+
+echo running: jspm install
+$JSPM_CMD install
+exitWithMessageOnError "failed: jspm install"
+
+echo running: gulp --gulpfile build/production-build.js
 node_modules/.bin/gulp --gulpfile build/production-build.js
-exitWithMessageOnError "failed: `gulp --gulpfile build/production-build.js`"
+exitWithMessageOnError "failed: gulp --gulpfile build/production-build.js"
 
 cd - > /dev/null
 
