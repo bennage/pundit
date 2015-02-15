@@ -1,4 +1,4 @@
-require('6to5/register');
+require('6to5-core/register');
 
 var logger = require('winston');
 
@@ -48,6 +48,7 @@ if (app.get('env') == 'development') {
 }
 
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(session( { secret: 'bennage', resave: false, saveUninitialized: false }));
 app.use(auth(app));
 
