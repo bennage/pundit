@@ -25,6 +25,7 @@ everyauth.everymodule
 everyauth.github
     .appId(clientId)
     .appSecret(clientSecret)
+    .scope('repo')
     .findOrCreateUser( (session, accessToken, accessTokenExtra, githubUserMetadata) => {
         session['user'] = githubUserMetadata;
         session['user']['accessToken'] = accessToken;
