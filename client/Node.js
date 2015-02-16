@@ -85,4 +85,17 @@ export class Node {
             return childNode;
         }
     };
+
+    lookupFileBySha (sha) {
+
+        if(this.blobSha === sha) return this;
+
+        for(var item in this.nodes){
+            var node = this.nodes[item];
+            var found = node.lookupFileBySha(sha);
+            if(found) return found;
+        }
+
+        return false;
+    }
 }

@@ -16,6 +16,16 @@
 					</compose>
 				</template>
 			</ul>
+
+			<div if.bind="filesWithComments.length > 0">
+				<div>Commented on</div>
+				<ul>
+					<li repeat.for="item of filesWithComments">
+						<a href="#/${item.url}">${item.name}</a>
+						<span class="count">${item.count}</span>
+					</li>
+				</ul>
+			</div>
 		</section>
 
 		<section class="document">
