@@ -10,6 +10,7 @@ export class DocumentClient {
         this.collections = [];
         this.collectionId = '';
         this.databaseLink = '';
+        this.collectionLink = '';
     }
 
     queryDatabases(query) {
@@ -38,6 +39,11 @@ export class DocumentClient {
     createCollectionAsync(databaseLink, body, optionsopt) {
         this.databaseLink = databaseLink;
         this.collectionId = body.id;
+        return Q({});
+    }
+
+    createDocumentAsync(collectionLink, comment, opts) {
+        this.collectionLink = collectionLink;
         return Q({});
     }
 }

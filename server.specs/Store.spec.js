@@ -100,10 +100,13 @@ describe('The document store', () => {
         it('constructs the expected query', done => {
             var client = new DocumentClient();
             var store = new Store(client);
+            store.database = {
+                _self: databaseLink
+            };
 
             const expected = `SELECT * FROM x WHERE x.id = '${collection_id}'`;
 
-            store.collectionExists(databaseLink, collection_id)
+            store.collectionExists(collection_id)
                 .then(response => {
                     expect(client.query).to.equal(expected);
                     expect(client.databaseLink).to.equal(databaseLink);
@@ -155,6 +158,9 @@ describe('The document store', () => {
 
             it('sets `exists` to true', done => {
                 var store = new Store(client);
+                store.database = {
+                    _self: databaseLink
+                };
 
                 store.collectionExists(collection_id)
                     .then(response => {
@@ -166,8 +172,11 @@ describe('The document store', () => {
                     });
             });
 
-            it('sets `collection` to defined', done => {
+            it('sets `collection`', done => {
                 var store = new Store(client);
+                store.database = {
+                    _self: databaseLink
+                };
 
                 store.collectionExists(collection_id)
                     .then(response => {
@@ -189,16 +198,17 @@ describe('The document store', () => {
         it('the client receives the expected request', done => {
             var client = new DocumentClient();
             var store = new Store(client);
+            store.database = {
+                _self: databaseLink
+            };
 
-            store.createCollection(databaseLink, 'blob_sha')
+            store.createCollection('blob_sha')
                 .then(response => {
                     expect(client.collectionId).to.equal('blob_sha');
                     expect(client.databaseLink).to.equal(databaseLink);
                     done();
                 })
-                .catch(err => {
-                    done(err);
-                });
+                .catch(done);
         });
     });
 
@@ -207,17 +217,20 @@ describe('The document store', () => {
         const blobSha = 'something';
         const comment = {};
 
-        it('acknowledges success', done => {
+        it('returns a promise when complete', done => {
 
             var client = new DocumentClient();
             var store = new Store(client);
+            store.collection = {
+                _self: 'collection_link'
+            };
 
             store
                 .persistComment(blobSha, comment)
                 .then(response => {
-                    expect(response).to.be.true();
                     done();
-                });
+                })
+                .catch(done);
 
         });
     });
