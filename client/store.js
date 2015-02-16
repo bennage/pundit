@@ -38,4 +38,13 @@ export class Store {
             });
     }
 
+    getCommentCounts(owner, repo) {
+
+        return this.http
+            .get(`/comments/counts/${owner}/${repo}`)
+            .then(response => {
+                return response.content;
+            });
+    }
+
 }

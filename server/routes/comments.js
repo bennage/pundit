@@ -11,7 +11,7 @@ router.post('/new', (req, res) => {
 
     var comment = req.body;
     comment.timestamp = new Date();
-    
+
     store
         .persistComment(comment)
         .then(x => {
@@ -19,6 +19,21 @@ router.post('/new', (req, res) => {
             res.status(200);
         })
         .catch(logger.error);
+});
+
+router.get('/counts/:owner/:repo', (req, res) => {
+
+    logger.info(req.url);
+
+    var p = req.params;
+
+    store
+        .getCommentCounts(p.owner, p.repo)
+        .then(comments => {
+            res.json(comments);
+        })
+        .catch(logger.error);
+
 });
 
 router.get('/:owner/:repo/:blobSha', (req, res) => {
@@ -33,7 +48,6 @@ router.get('/:owner/:repo/:blobSha', (req, res) => {
             res.json(comments);
         })
         .catch(logger.error);
-
 });
 
 export default router;
