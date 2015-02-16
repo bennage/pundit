@@ -33,7 +33,7 @@ export class GitHub {
 		});
 	}
 
-	fetchStore (owner, repo, sha1) {
+	fetchTree (owner, repo, sha1) {
 		// todo: the desired sha should be provided by
 		// the owner requesting the feedback
 

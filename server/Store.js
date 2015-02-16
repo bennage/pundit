@@ -123,7 +123,6 @@ export class Store {
             });
     }
 
-
     // TODO: this should be moved into a stored procudure
     getCommentCounts (owner, repo) {
         const qualified_repo = `${owner}/${repo}`;

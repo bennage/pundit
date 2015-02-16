@@ -32,7 +32,7 @@ export class Repository{
 		this.repo = route.repo;
 
 		return this.github
-			.fetchStore(route.owner, route.repo)
+			.fetchTree(route.owner, route.repo)
 			.then(response => {
 				self.sha = response.sha;
 				self.tree = response;
@@ -43,5 +43,9 @@ export class Repository{
 			.then(response => {
 				console.dir(response);
 			});
+	}
+
+	associateCountsWithBlobs () {
+
 	}
 }
