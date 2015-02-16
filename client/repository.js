@@ -14,6 +14,7 @@ export class Repository{
 		this.sha = '';
 		this.tree = {};
 		this.store = store;
+		this.filesWithComments = [];
 
 		this.router = router;
 
@@ -40,12 +41,20 @@ export class Repository{
 			.then(() => {
 				return self.store.getCommentCounts(route.owner, route.repo);
 			})
-			.then(response => {
-				console.dir(response);
-			});
+			.then(this.associateCountsWithBlobs.bind(this));
 	}
 
-	associateCountsWithBlobs () {
+	associateCountsWithBlobs (comments) {
+		var self = this;
+
+		for(var sha in comments) {
+			var file = this.tree.lookupFileBySha(sha);
+
+			if(file) {
+				file.count = comments[sha];
+				this.filesWithComments.push(file);
+			}
+		}
 
 	}
 }
