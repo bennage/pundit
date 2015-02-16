@@ -27,7 +27,8 @@
       "aurelia-http-client": "^0.4.3",
       "aurelia-router": "^0.5.1",
       "bootstrap": "^3.3.1",
-      "font-awesome": "^4.3.0"
+      "font-awesome": "^4.3.0",
+      "moment": "^2.9.0"
     }
   },
   "dependencies": {

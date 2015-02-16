@@ -2,6 +2,7 @@ import {GitHub} from './github';
 import {Store} from './store';
 import {Line} from './Line';
 import context from './context';
+import moment from 'moment';
 
 export class Document{
 
@@ -48,6 +49,11 @@ export class Document{
         var self = this;
         comments.forEach(comment => {
             var line = self.lines[comment.lineNumber];
+            // HACK: this should be done in the view.
+            // I'm guessing that it would use a `global-behavior` maybe?
+            // Once this is moved to the view, we can remove `moment`
+            // from this file.
+            comment.timestamp = moment(comment.timestamp).fromNow();
             line.comments.push(comment);
         });
     }
@@ -68,7 +74,7 @@ export class Document{
             blobSha: this.sha,
             body: line.newCommentBody,
             lineNumber: line.number,
-            timestamp: new Date()
+            timestamp: 'just now'
         };
 
         line.comments.push(comment);

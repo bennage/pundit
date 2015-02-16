@@ -9,8 +9,11 @@ router.post('/new', (req, res) => {
 
     logger.info(req.url);
 
+    var comment = req.body;
+    comment.timestamp = new Date();
+    
     store
-        .persistComment(req.body)
+        .persistComment(comment)
         .then(x => {
             logger.info(req.url, x);
             res.status(200);
