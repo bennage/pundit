@@ -17,7 +17,7 @@
           </ul>
 
           <div class="user navbar-right">
-              <img src="${user.avatar_url}" title="${user.name}" />
+              <img src.bind="user.avatar_url" title="${user.name}" />
               <div class="pull-right">
                   <div>${user.name}</div>
                   <a href="/logout">Sign out</a>
