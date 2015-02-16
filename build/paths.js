@@ -1,13 +1,10 @@
 var path = require('path');
 
-var appRoot = 'client/';
-
 module.exports = {
-  root: appRoot,
-  source: appRoot + '**/*.js',
-  html: appRoot + '**/*.html',
-  style: 'styles/**/*.css',
-  output: 'server/public/dist',
-  e2eSpecsSrc: 'test/e2e/src/*.js',
-  e2eSpecsDist: 'test/e2e/dist/'
+    'stylus-source' : './stylus/styles.styl',
+    'stylus-target' : './server/public/styles',
+    'client-source-js' : './client/**/*.js',
+    'client-source-html' : './client/**/*.html',
+    'client-target' : './server/public/client',
+    'client-sourceMap' : '/sourcemap'
 };

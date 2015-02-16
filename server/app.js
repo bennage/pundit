@@ -40,12 +40,20 @@ if (app.get('env') == 'development') {
         colorize: true,
         prettyPrint: true
     });
+
+    app.use('/sourcemap/*', function(req, res, next) {
+        res.sendFile(path.join(__dirname, '../client/', req.params[0]));
+    });
 }
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/jspm_packages/*', function(req, res, next) {
     res.sendFile(path.join(__dirname, '../jspm_packages/', req.params[0]));
+});
+
+app.use('/config.js', function(req, res, next) {
+    res.sendFile(path.join(__dirname, '../config.js'));
 });
 
 app.use(session( { secret: 'bennage', resave: false, saveUninitialized: false }));
