@@ -18,14 +18,14 @@
   },
   "jspm": {
     "directories": {
-      "baseURL": "server/public"
+      "baseURL": ""
     },
     "dependencies": {
       "aurelia-bootstrapper": "^0.9.1",
       "aurelia-event-aggregator": "^0.2.2",
-      "aurelia-framework": "^0.8.4",
+      "aurelia-framework": "^0.8.6",
       "aurelia-http-client": "^0.4.3",
-      "aurelia-router": "^0.5.1",
+      "aurelia-router": "^0.5.5",
       "bootstrap": "^3.3.1",
       "font-awesome": "^4.3.0",
       "moment": "^2.9.0"
