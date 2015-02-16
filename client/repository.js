@@ -17,7 +17,7 @@ export class Repository{
 
 		router.configure(config => {
 			config.map([
-				{ route: ['','welcome'],  moduleId: 'welcome' },
+				{ route: [''],  moduleId: 'document' },
 				{ route: ':sha/*path',  moduleId: 'document', title:'Document' }
 			]);
 		});

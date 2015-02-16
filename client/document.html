@@ -1,5 +1,15 @@
 <template>
 
+    <section if.bind="!sha">
+        <div class="panel panel-info">
+            <div class="panel-heading">Select a document</div>
+           <div class="panel-body">
+             Locate the document that you want to comment on, using the tree
+             to the left.
+           </div>
+        </div>
+    </section>
+
     <div>${path}</div>
     <table>
         <template repeat.for="line of lines">

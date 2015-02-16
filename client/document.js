@@ -20,6 +20,8 @@ export class Document{
 
     activate(route) {
 
+        if(!route.sha) return;
+        
         var self = this;
 
         this.sha = route.sha;
