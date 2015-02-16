@@ -77,8 +77,13 @@ export class GitHub {
 			self.captureRateLimit(response);
 
 			var body = response.content;
-			var decoded = atob(body.content);
+			var decoded = GitHub.safeDecode(body.content);
 			return decoded;
 		});
 	};
+
+	static safeDecode(content){
+		// http://stackoverflow.com/questions/9786508/javascript-atob-returning-string-contains-an-invalid-character
+		return atob(content.replace(/\s/g, ''));
+	}
 }
