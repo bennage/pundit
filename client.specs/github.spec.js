@@ -1,72 +1,42 @@
-import { Headers } from 'aurelia-http-client';
 import { GitHub } from '../client/github';
+import { EventAggregator } from './mocks/EventAggregator';
+import { HttpClient } from './mocks/HttpClient';
 
-const TREE_SHA = 'dd15628c3ae3e14733019683733feb92c8fedf11';
 const OWNER = 'an-owner';
 const REPO = 'a-repo';
 const SHA = 'a-sha';
 
-class HttpStub {
-
-	constructor() {
-
-		var headers = new Headers();
-
-		this.response = {
-			headers: headers,
-			content: {
-				sha: TREE_SHA,
-				tree: [
-					{ path: 'file1', type: 'blob' },
-					{ path: 'folder1', type: 'tree'},
-					{ path: 'folder1/fileA', type: 'blob'},
-					{ path: 'folder1/fileB', type: 'blob' }
-				],
-				truncated: false
-			}
-		};
-
-		this.invoked = 0;
-	}
-
-	get(url) {
-		this.url = url;
-		this.invoked += 1;
-		return new Promise((resolve) => {
-			resolve(this.response);
-		});
-	}
-}
-
 describe('the GitHub module', () => {
+
+	var events =  new EventAggregator();
 
 	describe('when fetching a repository', () => {
 
-		it('constructs the url for fetching a tree recurvisely', (done) => {
-			var http = new HttpStub();
-			var github = new GitHub(http);
+		it('constructs the url for fetching a tree recurvisely', done => {
+			var http = new HttpClient();
+			var github = new GitHub(http, events);
 
-			github.fetchStore(OWNER,REPO,SHA).then(response => {
+			github.fetchTree(OWNER,REPO,SHA).then(response => {
 				expect(http.url).toBe(`repos/${OWNER}/${REPO}/git/trees/${SHA}?recursive=1`);
 				done();
 			});
 		});
 
-		it('assumes `master` when the sha is not provided', (done) => {
-			var http = new HttpStub();
-			var github = new GitHub(http);
+		it('assumes `master` when the sha is not provided', done => {
+			var http = new HttpClient();
+			var github = new GitHub(http, events);
 
-			github.fetchStore(OWNER,REPO).then(response => {
+			github.fetchTree(OWNER,REPO).then(response => {
 				expect(http.url).toBe(`repos/${OWNER}/${REPO}/git/trees/master?recursive=1`);
 				done();
 			});
 		});
 
-		it('returns an unflatten tree', (done) => {
-			var http = new HttpStub();
-			var github = new GitHub(http);
+		it('returns an unflatten tree', done => {
+			var http = new HttpClient();
+			var github = new GitHub(http, events);
 
-			github.fetchStore(OWNER,REPO,SHA).then(response => {
+			github.fetchTree(OWNER,REPO,SHA).then(response => {
 				expect(response.name).toBe('_root_');
 				expect(response.nodes).toBeDefined();
 				expect(response.nodes.file1).toBeDefined();
@@ -74,36 +44,37 @@ describe('the GitHub module', () => {
 			});
 		});
 
-		it('attaches the sha to the tree', (done) => {
-			var http = new HttpStub();
-			var github = new GitHub(http);
+		it('attaches the sha to the tree', done => {
+			var http = new HttpClient();
+			var github = new GitHub(http, events);
 
-			github.fetchStore(OWNER,REPO,SHA).then(response => {
-				expect(response.sha).toBe(TREE_SHA);
-				done();
-			});
+			github.fetchTree(OWNER, REPO, SHA)
+				.then(response => {
+					expect(response.sha).toBe(HttpClient.TREE_SHA);
+					done();
+				});
 		});
 
-		it('attaches a shortened sha to the tree', (done) => {
-			var http = new HttpStub();
-			var github = new GitHub(http);
+		it('attaches a shortened sha to the tree', done => {
+			var http = new HttpClient();
+			var github = new GitHub(http, events);
 
-			github.fetchStore(OWNER,REPO,SHA).then(response => {
+			github.fetchTree(OWNER,REPO,SHA).then(response => {
 				expect(response.shortSha).toBe('dd15628');
 				expect(response.shortSha.length).toBe(7);
 				done();
 			});
 		});
 
-		it('um, throws or something when the response is truncated', (done) => {
-			var http = new HttpStub();
+		it('um, throws or something when the response is truncated', done => {
+			var http = new HttpClient();
 			http.response.content.truncated = true;
 
-			var github = new GitHub(http);
+			var github = new GitHub(http, events);
 
 			//NOTE: I don't know what good idiomatic JavaScript error handling looks like!
 
-			github.fetchStore(OWNER,REPO,SHA).
+			github.fetchTree(OWNER,REPO,SHA).
 			then(response => {
 				throw new '`then` was invoked instead of `catch`';
 			}).
@@ -113,38 +84,39 @@ describe('the GitHub module', () => {
 			});
 		});
 
-		it('returns a cached response on subsequent request for the same tree', (done) => {
-			var http = new HttpStub();
-			var github = new GitHub(http);
+		it('returns a cached response on subsequent request for the same tree', done => {
+			var http = new HttpClient();
+			var github = new GitHub(http, events);
 
-			github.fetchStore(OWNER,REPO,TREE_SHA).
-				then(response1 => {
+			github.fetchTree(OWNER, REPO, HttpClient.TREE_SHA)
+				.then(response1 => {
 					// after the 1st call completes, we make another
 					// TODO: I suspect there's a better way to do this...
 
 					expect(http.invoked).toBe(1);
 
-					github.fetchStore(OWNER,REPO,TREE_SHA).
-						then(response2 => {
+					github.fetchTree(OWNER, REPO, HttpClient.TREE_SHA)
+						.then(response2 => {
 							expect(http.invoked).toBe(1);
 							done();
-						});
+						})
+						.catch(done);
 				});
 		});
 
-		it('does not return a cached response on subsequent request for different tree', (done) => {
-			var http = new HttpStub();
-			var github = new GitHub(http);
+		it('does not return a cached response on subsequent request for different tree', done => {
+			var http = new HttpClient();
+			var github = new GitHub(http, events);
 
 			var firstSHA = 'a1b23c';
 			var secondSHA = '3c2b1a';
 
-			github.fetchStore(OWNER,REPO,firstSHA).
+			github.fetchTree(OWNER,REPO,firstSHA).
 				then(response1 => {
 
 					expect(http.invoked).toBe(1);
 
-					github.fetchStore(OWNER,REPO,secondSHA).
+					github.fetchTree(OWNER,REPO,secondSHA).
 						then(response2 => {
 							expect(http.invoked).toBe(2);
 							done();
