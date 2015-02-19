@@ -14,9 +14,7 @@ gulp.task('serve', ['build'], function () {
     var serverFile =  'server/bin/www';
 
     // start the server at the beginning of the task
-    server.run({
-        file:serverFile
-    });
+    server.run([serverFile]);
 
     // rebuild the client source when files change
     gulp.watch([paths['client-source-html']], ['build-html', browserSync.reload]);
@@ -26,6 +24,6 @@ gulp.task('serve', ['build'], function () {
     // restart the server itself when backend code changes
     gulp.watch(
         ['server/*.js', 'server/routes/**/*.js'],
-        function() {server.run({ file:serverFile }); }
+        function() {server.run([serverFile]); }
         );
 });
