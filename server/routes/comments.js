@@ -28,7 +28,7 @@ router.get('/counts/:owner/:repo', (req, res) => {
     var p = req.params;
 
     store
-        .getCommentCounts(p.owner, p.repo)
+        .getUnhandledCommentCounts(p.owner, p.repo)
         .then(comments => {
             res.json(comments);
         })
