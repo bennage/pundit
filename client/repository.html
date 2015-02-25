@@ -1,13 +1,14 @@
 <template>
 
-	<div title="${sha}">
-		<i class="fa fa-sitemap"></i>
-		<a href="http://github.com/${owner}/${repo}" target="_new">${owner}/${repo}</a>
-	</div>
-
 	<div class="repository">
 
 		<section class="tree">
+
+			<div class="name" title="${sha}">
+				<i class="fa fa-sitemap"></i>
+				<a href="http://github.com/${owner}/${repo}" target="_new">${owner}/${repo}</a>
+			</div>
+
 			<ul>
 				<template repeat.for="node of tree.nodesToArray()">
 					<compose

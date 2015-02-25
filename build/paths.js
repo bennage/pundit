@@ -1,7 +1,7 @@
 var path = require('path');
 
 module.exports = {
-    'stylus-source' : './stylus/styles.styl',
+    'stylus-source' : './stylus/*.styl',
     'stylus-target' : './server/public/styles',
     'client-source-js' : './client/**/*.js',
     'client-source-html' : './client/**/*.html',
