@@ -9,7 +9,7 @@
 				<a href="http://github.com/${owner}/${repo}" target="_new">${owner}/${repo}</a>
 			</div>
 
-			<ul>
+			<ul class="files">
 				<template repeat.for="node of tree.nodesToArray()">
 					<compose
 						model.bind="node"
@@ -18,12 +18,13 @@
 				</template>
 			</ul>
 
-			<div if.bind="filesWithComments.length > 0">
-				<div>Commented on</div>
+			<div class="with-comments" if.bind="filesWithComments.length > 0">
+				<h2>Files with comments</h2>
 				<ul>
 					<li repeat.for="item of filesWithComments">
+						<i class="fa fa-file-o"></i>
 						<a href="#/${item.url}">${item.name}</a>
-						<span class="count">${item.count}</span>
+						<span class="badge">${item.count}</span>
 					</li>
 				</ul>
 			</div>
