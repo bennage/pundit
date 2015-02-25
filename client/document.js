@@ -60,6 +60,10 @@ export class Document{
         });
     }
 
+    markCommentHandled(comment) {
+        this.store.markHandled(comment);
+    }
+
     postComment(line) {
         line.adding = false;
 

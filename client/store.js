@@ -29,6 +29,17 @@ export class Store {
             });
     }
 
+    markHandled(comment) {
+        this.http
+            .post('/comments/handle/', comment)
+            .then(response => {
+                console.dir(response);
+            })
+            .catch(error => {
+                console.dir(error);
+            });
+    }
+
     getComments(owner, repo, blobSha) {
 
         return this.http

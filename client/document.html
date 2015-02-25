@@ -33,6 +33,8 @@
                             <span class="name">${comment.author.name}</span>
                             <span> commented&nbsp;</span>
                             <time datetime.bind="comment.timestamp">${comment.timestamp}</time>
+                            <i class="add-comment fa fa-plus-square"
+                                click.trigger="$parent.$parent.markCommentHandled(comment)"></i>
                         </div>
                         <div class="body" markdown-renderer.bind="comment.body"></div>
                     </div>

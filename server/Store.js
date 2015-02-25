@@ -108,6 +108,17 @@ export class Store {
             .createDocumentAsync(collectionLink, comment, opts);
     }
 
+    markHandled (comment) {
+        logger.info('markHandled', comment);
+
+        comment.handled = true;
+        comment.handledOn = Date.UtcNow;
+        const collectionLink = this.collection._self;
+
+        return this.client
+            .replaceDocumentAsync(collectionLink, comment);
+    }
+
     getComments (owner, repo, blobSha) {
         const qualified_repo = `${owner}/${repo}`;
         const query = `SELECT * FROM x WHERE x.repo = '${qualified_repo}' AND x.blobSha = '${blobSha}'`;

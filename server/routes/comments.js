@@ -21,6 +21,21 @@ router.post('/new', (req, res) => {
         .catch(logger.error);
 });
 
+router.post('/handle', (req, res) => {
+
+    logger.info(req.url);
+
+    var comment = req.body;
+
+    store
+        .markHandled(comment)
+        .then(x => {
+            logger.info(req.url, x);
+            res.status(200);
+        })
+        .catch(logger.error);
+});
+
 router.get('/counts/:owner/:repo', (req, res) => {
 
     logger.info(req.url);
