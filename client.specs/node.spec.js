@@ -28,6 +28,16 @@ describe('An unflattened tree', () => {
 		expect(tree.nodes.folder1.name).toBe('folder1');
 	});
 
+	it('should indentify the entire path to a markdown file', () => {
+		var rootFolder = tree.nodes['has-markdown'];
+		var subFolder = rootFolder.nodes['nested'];
+		var markdownFile = subFolder.nodes['some.md'];
+
+		expect(rootFolder.containsMarkdown).toBe(true);
+		expect(subFolder.containsMarkdown).toBe(true);
+		expect(markdownFile.containsMarkdown).toBe(true);
+	});
+
 	describe('has nodes, and any node', () => {
 
 		it('returns is path', () => {
@@ -39,16 +49,18 @@ describe('An unflattened tree', () => {
 			var sawMarkdownFile = false;
 			var sawNonMarkdownFile = false;
 
-			tree.nodesToArray().forEach(node => {
-				var ext = node.name.substr(-3);
-				expect(node.containsMarkdown).toBe(ext === '.md');
+			tree.nodesToArray()
+				.filter(node => { return !node.isFolder; })
+				.forEach(node => {
+					var ext = node.name.substr(-3);
+					expect(node.containsMarkdown).toBe(ext === '.md');
 
-				if(node.containsMarkdown) {
-					sawMarkdownFile = true;
-				} else {
-					sawNonMarkdownFile = true
-				}
-			});
+					if(node.containsMarkdown) {
+						sawMarkdownFile = true;
+					} else {
+						sawNonMarkdownFile = true
+					}
+				});
 
 			// ensure that our test data contains both cases
 			expect(sawMarkdownFile).toBe(true);

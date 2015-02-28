@@ -10,6 +10,8 @@ export class Node {
         this.fullPath = '';
         this.blobSha = false;
         this.url = '';
+
+        this.containsMarkdown = !!name.match(/\.md$/);
     }
 
     //HACK: I don't like passing `owner` and `repo` here
@@ -44,12 +46,29 @@ export class Node {
             current.url = `${owner}/${repo}/${item.sha}/${item.path}`
         });
 
+        Node.markMarkdownFiles(root);
+
         return root;
-    };
+    }
+
+    static markMarkdownFiles(parent) {
+
+        if(parent.containsMarkdown) return;
+
+        parent.nodesToArray().forEach(child =>{
+
+            Node.markMarkdownFiles(child);
+
+            if(child.containsMarkdown) {
+                parent.containsMarkdown = true;
+                return;
+            }
+        });
+    }
 
     toggle () {
         this.expanded = !this.expanded;
-    };
+    }
 
     // TODO: @EisenbergEffect recommend that we use a pre-computed property here
     // The reason is performance (dirty checcking), however we can't compute this
