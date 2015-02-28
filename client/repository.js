@@ -13,6 +13,8 @@ export class Repository{
 		this.repo = '';
 		this.sha = '';
 		this.tree = {};
+		this.treeFiltered = {};
+		this.isFiltered = false;
 		this.store = store;
 		this.filesWithComments = [];
 
@@ -37,11 +39,24 @@ export class Repository{
 			.then(response => {
 				self.sha = response.sha;
 				self.tree = response;
+
+				self.toggleFilter();
 			})
 			.then(() => {
 				return self.store.getCommentCounts(route.owner, route.repo);
 			})
 			.then(this.associateCountsWithBlobs.bind(this));
+	}
+
+	toggleFilter() {
+
+		if(this.isFiltered){
+			this.treeFiltered = this.tree;
+		} else {
+			this.treeFiltered = this.tree.clone(x => { return x.containsMarkdown; });
+		}
+
+		this.isFiltered = !this.isFiltered;
 	}
 
 	associateCountsWithBlobs (comments) {

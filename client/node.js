@@ -1,7 +1,7 @@
 export class Node {
 
     constructor(name){
-        this.name = name;
+        this.name = name || '_no_name_';
         this.nodes = {};
         this.source = null;
         this.expanded = false;
@@ -11,7 +11,7 @@ export class Node {
         this.blobSha = false;
         this.url = '';
 
-        this.containsMarkdown = !!name.match(/\.md$/);
+        this.containsMarkdown = !!this.name.match(/\.md$/);
     }
 
     //HACK: I don't like passing `owner` and `repo` here
@@ -68,6 +68,25 @@ export class Node {
 
     toggle () {
         this.expanded = !this.expanded;
+    }
+
+    clone(filter) {
+        var property, current;
+
+        var copy = new Node();
+        Object.assign(copy,this);
+        // we don't want to reference the same node instances
+        copy.nodes = {};
+
+        for(property in this.nodes){
+            current = this.nodes[property];
+
+            if(filter(current)){
+                copy.nodes[property] = current.clone(filter);
+            }
+        }
+
+        return copy;
     }
 
     // TODO: @EisenbergEffect recommend that we use a pre-computed property here

@@ -1,0 +1,10 @@
+<template>
+    <ul>
+        <template repeat.for="node of treeFiltered.nodesToArray()">
+            <compose
+                model.bind="node"
+                view="node.html">
+            </compose>
+        </template>
+    </ul>
+</template>
