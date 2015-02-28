@@ -1,6 +1,6 @@
 import {GitHub} from './github';
 import {Store} from './store';
-import {Line} from './Line';
+import {Line} from './line';
 import context from './context';
 import moment from 'moment';
 
@@ -21,7 +21,7 @@ export class Document{
     activate(route) {
 
         if(!route.sha) return;
-        
+
         var self = this;
 
         this.sha = route.sha;

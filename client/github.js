@@ -1,7 +1,7 @@
 import { EventAggregator } from 'aurelia-event-aggregator';
 import { Headers } from 'aurelia-http-client';
 import { HttpClient } from 'aurelia-http-client';
-import { Node } from './Node';
+import { Node } from './node';
 import context from './context';
 
 function configuredHttpClient() {
