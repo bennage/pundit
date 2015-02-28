@@ -4,14 +4,16 @@ describe('An unflattened tree', () => {
 
 	var flat_tree = [
 		{ path: 'file1', type: 'blob', sha: 'a1b2c3d4' },
+		{ path: 'file.md', type: 'blob' },
 		{ path: 'folder1', type: 'tree'},
 		{ path: 'folder1/fileA', type: 'blob'},
 		{ path: 'folder1/fileB', type: 'blob' },
 		{ path: 'folder1/fileB', type: 'blob' },
 		{ path: 'no-markdown', type: 'tree'},
-		{ path: 'no-markdown/code-file', type: 'blob' }
-
-
+		{ path: 'no-markdown/code-file', type: 'blob' },
+		{ path: 'has-markdown', type: 'tree'},
+		{ path: 'has-markdown/nested', type: 'tree'},
+		{ path: 'has-markdown/nested/some.md', type: 'blob' }
 	];
 
 	var tree = Node.unflatten(flat_tree);
@@ -31,6 +33,27 @@ describe('An unflattened tree', () => {
 		it('returns is path', () => {
 			var node = tree.nodes.folder1.nodes.fileA;
 			expect(node.fullPath).toBe('folder1/fileA');
+		});
+
+		it('is identified as markdown when the extension is .md', () => {
+			var sawMarkdownFile = false;
+			var sawNonMarkdownFile = false;
+
+			tree.nodesToArray().forEach(node => {
+				var ext = node.name.substr(-3);
+				expect(node.containsMarkdown).toBe(ext === '.md');
+
+				if(node.containsMarkdown) {
+					sawMarkdownFile = true;
+				} else {
+					sawNonMarkdownFile = true
+				}
+			});
+
+			// ensure that our test data contains both cases
+			expect(sawMarkdownFile).toBe(true);
+			expect(sawNonMarkdownFile).toBe(true);
+
 		});
 
 		it('can provide its children as array, with folders listed before files', () => {
