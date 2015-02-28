@@ -6,7 +6,12 @@ describe('An unflattened tree', () => {
 		{ path: 'file1', type: 'blob', sha: 'a1b2c3d4' },
 		{ path: 'folder1', type: 'tree'},
 		{ path: 'folder1/fileA', type: 'blob'},
-		{ path: 'folder1/fileB', type: 'blob' }
+		{ path: 'folder1/fileB', type: 'blob' },
+		{ path: 'folder1/fileB', type: 'blob' },
+		{ path: 'no-markdown', type: 'tree'},
+		{ path: 'no-markdown/code-file', type: 'blob' }
+
+
 	];
 
 	var tree = Node.unflatten(flat_tree);
@@ -31,9 +36,23 @@ describe('An unflattened tree', () => {
 		it('can provide its children as array, with folders listed before files', () => {
 			var children = tree.nodesToArray();
 
-			expect(children[0].name).toBe('folder1');
-			expect(children[1].name).toBe('file1');
-			expect(children[2]).toBeUndefined();
+			// first child to be a folder
+			expect(children[0].isFolder).toBe(true);
+
+			// last child to be a file
+			var lastIndex = children.length - 1;
+			expect(children[lastIndex].isFolder).toBe(false);
+
+			// we should not see any folders after the first file
+			var hasSeenFile = false;
+
+			children.forEach(child => {
+				if(!child.isFolder) {
+					hasSeenFile = true;
+				} else {
+					expect(hasSeenFile).toBe(false);
+				}
+			});
 		});
 
 	});
