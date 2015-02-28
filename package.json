@@ -28,7 +28,8 @@
       "aurelia-router": "github:aurelia/router@^0.5.5",
       "bootstrap": "github:twbs/bootstrap@^3.3.1",
       "font-awesome": "npm:font-awesome@^4.3.0",
-      "moment": "github:moment/moment@^2.9.0"
+      "moment": "github:moment/moment@^2.9.0",
+      "showdown": "github:showdownjs/showdown@^0.3.4"
     }
   },
   "dependencies": {
