@@ -1,5 +1,7 @@
 <template>
 
+    <import from='./markdown-renderer'></import>
+
     <section if.bind="!sha">
         <div class="panel panel-info">
             <div class="panel-heading">Select a document</div>
@@ -32,7 +34,7 @@
                             <span> commented&nbsp;</span>
                             <time datetime.bind="comment.timestamp">${comment.timestamp}</time>
                         </div>
-                        <div class="body">${comment.body}</div>
+                        <div class="body" markdown-renderer.bind="comment.body"></div>
                     </div>
                 </td>
             </tr>
