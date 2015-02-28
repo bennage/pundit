@@ -17,16 +17,8 @@ export class MarkdownRendererAttachedBehavior {
         this.converter = new showdown.converter();
     }
 
-    attached() {
-        this.value.somethingElse();
-    }
-
     valueChanged(newValue) {
-
-        var html  = this.converter.makeHtml(
-          newValue.split('\n').map((line) => line.trim()).join('\n')
-        );
-
+        var html  = this.converter.makeHtml(newValue);
         this.element.innerHTML = html;
     }
 }
