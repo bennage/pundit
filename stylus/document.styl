@@ -2,56 +2,16 @@
     display table
     vertical-align top
     max-width 800px
+
     table
         border-radius 2px
         border 1px solid rgb(216, 216, 216)
-    .comment
-        border-radius 2px
-        border 1px solid rgb(216, 216, 216)
-        margin 0.5em
-        .meta
-            color rgb(153, 153, 153)
-            background-color rgb(247, 247, 247)
-            padding 0.5em
-            border-radius 2px 2px 0 0
-            img
-                border-radius 2px
-                width 20px
-                height 20px
-                margin-right 4px
-            .name
-                font-weight bold
-                color rgb(85, 85, 85)
-            .handled
-                color rgb(68, 157, 68)
-                float right
-                font-size 150%
 
-            .add-comment
-                color black
-                float right
-                font-size 80%
-                display none
-        &:hover
-            .meta
-                .add-comment
-                    display block
+    @require 'comment.styl'
 
-        .body
-            padding 0.5em 0.5em 0.5em 1em
-            white-space pre-wrap
-        textarea
-            display block
-            border none
-            width 100%
-            min-height 100px
-            max-height 500px
-            padding 10px
-            resize vertical
-        .commands
-            margin-top 0.5em
     .show-form
         margin 0 0.5em 0.5em 0.5em
+
     tr.line
         .add-comment
             display none
