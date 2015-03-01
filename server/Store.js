@@ -113,10 +113,9 @@ export class Store {
 
         comment.handled = true;
         comment.handledOn = Date.UtcNow;
-        const collectionLink = this.collection._self;
 
         return this.client
-            .replaceDocumentAsync(collectionLink, comment);
+            .replaceDocumentAsync(comment._self, comment);
     }
 
     getComments (owner, repo, blobSha) {

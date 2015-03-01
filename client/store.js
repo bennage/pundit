@@ -9,6 +9,8 @@ function configuredHttpClient() {
     return new HttpClient('', headers);
 }
 
+// NOTE: I'm questioning the usefulness of this abstraction
+
 export class Store {
 
     static inject() { return [configuredHttpClient]; }
@@ -21,9 +23,6 @@ export class Store {
 
         this.http
             .post('/comments/new', comment)
-            .then(response => {
-                console.dir(response);
-            })
             .catch(error => {
                 console.dir(error);
             });
@@ -32,9 +31,6 @@ export class Store {
     markHandled(comment) {
         this.http
             .post('/comments/handle/', comment)
-            .then(response => {
-                console.dir(response);
-            })
             .catch(error => {
                 console.dir(error);
             });

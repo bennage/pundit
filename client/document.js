@@ -61,6 +61,7 @@ export class Document{
     }
 
     markCommentHandled(comment) {
+        comment.handled = true;
         this.store.markHandled(comment);
     }
 
