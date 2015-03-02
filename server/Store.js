@@ -18,26 +18,22 @@ export class Store {
 
         this.databaseExists(databaseName)
             .then(response => {
-                logger.info('databaseExists', response);
                 return response.exists
                     ? Q(response.database)
                     : self.createDatabase(databaseName).bind(self);
             })
             .then(database => {
-
                 self.database = database;
-
-                return self.collectionExists(collectionName)
-                    .then(response => {
-                        logger.info('collectionExists', response);
-                        return response.exists
-                            ? Q(response.collection)
-                            : self.createCollection(collectionName).bind(self);
-                    })
-                    .then(collection => {
-                        self.collection = collection;
-                        return Q(collection);
-                    });
+                return self.collectionExists(collectionName);
+            })
+            .then(response => {
+                return response.exists
+                    ? Q(response.collection)
+                    : self.createCollection(collectionName).bind(self);
+            })
+            .then(collection => {
+                self.collection = collection;
+                return Q(collection);
             })
             .catch(logger.error);
     }
@@ -165,13 +161,13 @@ export class Store {
         const qualified_repo = `${owner}/${repo}`;
         const query = `SELECT * FROM x WHERE x.repo = '${qualified_repo}' AND NOT (x.handled AND false)`;
 
-        logger.info('getCommentCounts', query);
+        logger.info('getUnhandledCommentCounts', query);
 
         return this.client
             .queryDocuments(this.collection._self, query)
             .executeNextAsync()
             .then(response => {
-                logger.info('getCommentCounts', response);
+                logger.info('getUnhandledCommentCounts', response);
                 var comments = response.feed;
                 var results = {};
                 comments.forEach(x => {
