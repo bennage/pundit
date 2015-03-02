@@ -1,12 +1,48 @@
 import logger from 'winston';
 import Q from 'q';
 
+var storedProcedures = [
+    {
+        id: 'getUnhandledComments',
+        body: function (owner, repo) {
+            var context = getContext();
+            var response = context.getResponse();
+            var collection = context.getCollection();
+
+            var qualified_repo = owner + '/' + repo;
+            var query = 'SELECT * FROM x WHERE x.repo = "' + qualified_repo + '" AND NOT (x.handled AND false)';
+
+            var accept = collection.queryDocuments(collection.getSelfLink(), query, {},
+
+                function (err, documents, responseOptions) {
+
+                    if (err) throw err;
+
+                    var results = {};
+                    documents.forEach(x => {
+
+                        if(!results[x.blobSha]) {
+                            results[x.blobSha] = 0;
+                        }
+
+                        results[x.blobSha] += 1;
+
+                    });
+
+                });
+
+            if (!accept) throw 'Unable to query for unhandled comment counts';
+        }
+    }
+];
+
 export class Store {
 
     constructor (documentClient) {
         this.client = documentClient;
         this.database = null;
         this.collection = null;
+        this.storedProcedures = {};
     }
 
     initialize (databaseName) {
@@ -20,7 +56,7 @@ export class Store {
             .then(response => {
                 return response.exists
                     ? Q(response.database)
-                    : self.createDatabase(databaseName).bind(self);
+                    : self.createDatabase(databaseName);
             })
             .then(database => {
                 self.database = database;
@@ -29,11 +65,11 @@ export class Store {
             .then(response => {
                 return response.exists
                     ? Q(response.collection)
-                    : self.createCollection(collectionName).bind(self);
+                    : self.createCollection(collectionName);
             })
             .then(collection => {
                 self.collection = collection;
-                return Q(collection);
+                return self.createAllStoredProcedures();
             })
             .catch(logger.error);
     }
@@ -62,7 +98,10 @@ export class Store {
     createDatabase(databaseName) {
         logger.info('createDatabase', databaseName);
         return this.client
-            .createDatabaseAsync({ id: databaseName })  ;
+            .createDatabaseAsync({ id: databaseName })
+            .then(response => {
+                return Q(response.resource);
+            });
     }
 
     collectionExists(id) {
@@ -91,7 +130,56 @@ export class Store {
         const databaseLink = this.database._self;
 
         return this.client
-            .createCollectionAsync(databaseLink, { id: id })  ;
+            .createCollectionAsync(databaseLink, { id: id })
+            .then(response => {
+                return Q(response.resource);
+            });
+    }
+
+    storedProcedureExists(id) {
+
+        const collectionLink = this.collection._self;
+        const query = `SELECT * FROM x WHERE x.id = '${id}'`;
+
+        return this.client
+            .queryStoredProcedures(collectionLink, query)
+            .executeNextAsync()
+            .then(response => {
+                const found = response.feed.length === 1;
+                return {
+                    exists: found,
+                    storedProcedure: found ? response.feed[0] : undefined
+                };
+            });
+    }
+
+    createAllStoredProcedures() {
+
+        var self = this;
+
+        var create = this.client
+            .createStoredProcedureAsync
+            .bind(this.client, this.collection._self);
+
+        var wrapResource = x => { return Q(x.resource); };
+
+        var promises = storedProcedures.map(definition => {
+            logger.info(`creating stored procedure: ${definition.id}`);
+
+            return self
+                .storedProcedureExists(definition.id)
+                .then(response => {
+                    return response.exists
+                        ? Q(response.storedProcedure)
+                        : create(definition).then(wrapResource);
+                })
+                .then(sproc => {
+                    self.storedProcedures[sproc.id] = sproc._self;
+                    return Q(sproc);
+                });
+        });
+
+        return Q.all(promises);
     }
 
     persistComment (comment) {
