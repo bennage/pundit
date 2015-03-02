@@ -33,7 +33,8 @@ export class Repository{
 
 		this.owner = route.owner;
 		this.repo = route.repo;
-
+		this.filesWithComments = [];
+		
 		return this.github
 			.fetchTree(route.owner, route.repo)
 			.then(response => {

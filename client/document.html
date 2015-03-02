@@ -33,6 +33,19 @@
                             <span class="name">${comment.author.name}</span>
                             <span> commented&nbsp;</span>
                             <time datetime.bind="comment.timestamp">${comment.timestamp}</time>
+
+                            <button
+                                if.bind="!comment.handled"
+                                class="mark-handled btn"
+                                click.trigger="$parent.$parent.markCommentHandled(comment)">
+                                <i class="add-comment fa fa-check"></i>
+                                <span>Mark as handled</span>
+                            </button>
+
+                            <i
+                                if.bind="comment.handled"
+                                class="handled fa fa-check"
+                                title="This comment has been handled."></i>
                         </div>
                         <div class="body" markdown-renderer.bind="comment.body"></div>
                     </div>

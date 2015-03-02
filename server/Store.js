@@ -108,6 +108,16 @@ export class Store {
             .createDocumentAsync(collectionLink, comment, opts);
     }
 
+    markHandled (comment) {
+        logger.info('markHandled', comment);
+
+        comment.handled = true;
+        comment.handledOn = Date.UtcNow;
+
+        return this.client
+            .replaceDocumentAsync(comment._self, comment);
+    }
+
     getComments (owner, repo, blobSha) {
         const qualified_repo = `${owner}/${repo}`;
         const query = `SELECT * FROM x WHERE x.repo = '${qualified_repo}' AND x.blobSha = '${blobSha}'`;
@@ -127,6 +137,33 @@ export class Store {
     getCommentCounts (owner, repo) {
         const qualified_repo = `${owner}/${repo}`;
         const query = `SELECT * FROM x WHERE x.repo = '${qualified_repo}'`;
+
+        logger.info('getCommentCounts', query);
+
+        return this.client
+            .queryDocuments(this.collection._self, query)
+            .executeNextAsync()
+            .then(response => {
+                logger.info('getCommentCounts', response);
+                var comments = response.feed;
+                var results = {};
+                comments.forEach(x => {
+
+                    if(!results[x.blobSha]) {
+                        results[x.blobSha] = 0;
+                    }
+
+                    results[x.blobSha] += 1;
+
+                });
+                return results;
+            });
+    }
+
+    // TODO: this should be moved into a stored procudure
+    getUnhandledCommentCounts (owner, repo) {
+        const qualified_repo = `${owner}/${repo}`;
+        const query = `SELECT * FROM x WHERE x.repo = '${qualified_repo}' AND NOT (x.handled AND false)`;
 
         logger.info('getCommentCounts', query);
 
