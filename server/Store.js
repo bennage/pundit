@@ -163,7 +163,7 @@ export class Store {
     // TODO: this should be moved into a stored procudure
     getUnhandledCommentCounts (owner, repo) {
         const qualified_repo = `${owner}/${repo}`;
-        const query = `SELECT * FROM x WHERE x.repo = '${qualified_repo}' AND NOT (x.handled AND false)`;
+        const query = `SELECT * FROM x WHERE x.repo = '${qualified_repo}' AND (x.handled ?? false) = false`;
 
         logger.info('getCommentCounts', query);
 
