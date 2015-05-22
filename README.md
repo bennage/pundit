@@ -1,6 +1,5 @@
 # Pundit
-Enabling community discussion on markdown files hosted on GitHub leveraging
-[Disqus](https://disqus.com).
+Enabling community discussion on markdown files hosted on GitHub.
 
 ## Getting Started
 
