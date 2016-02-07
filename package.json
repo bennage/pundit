@@ -1,0 +1,33 @@
+{
+    "name": "pundit",
+    "version": "3.0.0",
+    "description": "comment on markdown files",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/bennage/pundit.git"
+    },
+    "keywords": [
+        "markdown",
+        "comment",
+        "collaborate"
+    ],
+    "author": "Christopher Bennage",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/bennage/pundit/issues"
+    },
+    "homepage": "https://github.com/bennage/pundit#readme",
+    "dependencies": {
+        "handlebars": "^4.0.5",
+        "koa": "^1.1.2",
+        "koa-bodyparser": "^2.0.1",
+        "koa-generic-session": "^1.10.1",
+        "koa-render": "^0.2.1",
+        "koa-router": "^5.3.0",
+        "koa-session": "^3.3.1"
+    }
+}
