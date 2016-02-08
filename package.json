@@ -22,13 +22,19 @@
   },
   "homepage": "https://github.com/bennage/pundit#readme",
   "dependencies": {
+    "bootstrap": "^3.3.6",
     "handlebars": "^4.0.5",
     "koa": "^1.1.2",
     "koa-bodyparser": "^2.0.1",
     "koa-generic-session": "^1.10.1",
     "koa-render": "^0.2.1",
     "koa-router": "^5.3.0",
+    "koa-send": "^3.1.0",
     "koa-session": "^3.3.1",
-    "marked": "^0.3.5"
+    "marked": "^0.3.5",
+    "mz": "^2.3.1"
+  },
+  "devDependencies": {
+    "co": "^4.6.0"
   }
 }
