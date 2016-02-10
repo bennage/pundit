@@ -13,8 +13,6 @@ marked.setOptions({
     //   smartypants: false
 });
 
-console.log(marked('I am using __markdown__.'));
-
 const outputPath = path.join(process.cwd(), 'rendered');
 
 module.exports = function (inputPath, callback) {

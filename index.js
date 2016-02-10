@@ -1,6 +1,7 @@
 const koa = require('koa');
 const app = koa();
 const review = require('./src/review');
+const navigation = require('./src/navigation');
 
 console.log('starting');
 
@@ -27,9 +28,7 @@ app.use(views('./views', {
 const Router = require('koa-router');
 const routes = new Router();
 
-routes.get('/', function* () {
-    this.body = yield this.render('app');
-});
+routes.get('/', navigation);
 
 routes.get('/review/:content', function* () {
     const id = this.params.content;
