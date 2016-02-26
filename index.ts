@@ -1,7 +1,8 @@
-const koa = require('koa');
-const app = koa();
-const review = require('./src/review');
-const navigation = require('./src/navigation');
+import * as koa from 'koa';
+import { review } from './src/review';
+import { navigation } from './src/navigation';
+
+const app = new koa();
 
 console.log('starting');
 

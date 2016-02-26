@@ -5,10 +5,10 @@
 			"name": "Launch",
 			"type": "node",
 			"request": "launch",
-			"program": "index.js",
+			"program": "${workspaceRoot}/index.js",
 			"stopOnEntry": false,
 			"args": [],
-			"cwd": ".",
+			"cwd": "${workspaceRoot}",
 			"runtimeExecutable": null,
 			"runtimeArgs": [
 				"--nolazy"
@@ -17,14 +17,19 @@
 				"NODE_ENV": "development"
 			},
 			"externalConsole": false,
-			"sourceMaps": false,
-			"outDir": null
+			"sourceMaps": true,
+			"outDir": null,
+            "preLaunchTask": "tsc"
 		},
 		{
 			"name": "Attach",
 			"type": "node",
 			"request": "attach",
-			"port": 5858
+			"port": 5858,
+			"sourceMaps": true,
+			"outDir": null,
+			"localRoot": "${workspaceRoot}",
+			"remoteRoot": null
 		}
 	]
 }

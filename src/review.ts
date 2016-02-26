@@ -1,7 +1,9 @@
-const fs = require('mz/fs');
-const path = require('path');
+'use strict';
 
-module.exports = function* (identifier) {
+import * as fs from 'mz/fs'; 
+import * as path from 'path'; 
+
+export function* review (identifier) {
     
     const pathToHtml = path.join(process.cwd(), 'rendered', identifier + '.html');
     

@@ -1,6 +1,8 @@
-const fs = require('fs');
-const path = require('path');
-const marked = require('marked');
+'use strict';
+
+import * as fs from 'fs';
+import * as path from 'path';
+import * as marked  from 'marked';
 
 marked.setOptions({
     renderer: new marked.Renderer(),
@@ -15,12 +17,12 @@ marked.setOptions({
 
 const outputPath = path.join(process.cwd(), 'rendered');
 
-module.exports = function (inputPath, callback) {
+export function render(inputPath, callback) {
 
     fs.readdir(inputPath, (err, files) => {
         if (err) callback(err);
 
-        files.forEach(file => {
+        files.forEach((file: String) => {
             if (!file.endsWith('.md')) return;
 
             const pathToFile = path.join(inputPath, file);

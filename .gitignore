@@ -1,5 +1,9 @@
 node_modules
+typings
 npm-debug.log
 secrets.json
 rendered/*.html
 public/*
+**/*.js.map
+**/*.js
+!gulpfile.js
