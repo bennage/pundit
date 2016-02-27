@@ -1,6 +1,6 @@
 'use strict';
 
-import * as fs from 'fs';
+import * as fs from 'mz/fs';
 import * as path from 'path';
 import * as marked  from 'marked';
 
@@ -17,26 +17,28 @@ marked.setOptions({
 
 const outputPath = path.join(process.cwd(), 'rendered');
 
-export function render(inputPath, callback) {
+export function render(inputPath) {
 
-    fs.readdir(inputPath, (err, files) => {
-        if (err) callback(err);
+    return fs
+        .readdir(inputPath)
+        .then(files => {
 
-        files.forEach((file: String) => {
-            if (!file.endsWith('.md')) return;
+            var rendering = files
+                .filter(file => file.endsWith('.md'))
+                .map(file => {
+                    const pathToFile = path.join(inputPath, file);
+                    const pathForHtml = path.join(outputPath, file.replace('.md', '.html'));
 
-            const pathToFile = path.join(inputPath, file);
-            const pathForHtml = path.join(outputPath, file.replace('.md', '.html'));
-            fs.readFile(pathToFile, 'utf8', (err, raw) => {
-                if (err) throw err;
-                console.log(pathToFile);
+                    return fs
+                        .readFile(pathToFile, 'utf8')
+                        .then(raw => {
+                            console.log(pathToFile);
 
-                const html = marked(raw);
-                fs.writeFile(pathForHtml, html, (err) => {
-
+                            const html = marked(raw);
+                            return fs.writeFile(pathForHtml, html);
+                        });
                 });
-            });
-        });
-    });
 
+            return Promise.all(rendering);
+        });
 };
