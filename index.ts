@@ -32,6 +32,7 @@ const routes = new Router();
 routes.get('/', navigation);
 
 routes.get('/review/:content', function* () {
+    var ctx = <koa.Context>this;
     const id = this.params.content;
     const html = yield review(id);
     this.body = yield this.render('app', { id: id, html: html });
